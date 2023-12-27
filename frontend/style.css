@@ -1,0 +1,20 @@
+.nav-link{
+    color: black;
+}
+.nav-item{
+    padding-left: 2em;
+}
+.del-btn{
+  background-color: red;
+  color: white;
+}
+.edit-btn{
+    background-color: aquamarine;
+}
+.fade:not(.show){
+    opacity: 1;
+    background-color: rgb(22, 22, 22,0.5);
+}
+#logout{
+    margin-left: 10px;
+}

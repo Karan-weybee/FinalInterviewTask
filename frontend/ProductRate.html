@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script defer type="text/javascript" src="ProductRate.js"></script>
+    <script defer type="text/javascript" src="script.js"></script>
+    <style>
+        .modal-header {
+            margin-top: 30px;
+        }
+
+        h4 {
+            margin: 0 10px 15px 10px;
+        }
+
+        #model-content {
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 3em;">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="index.html">Party</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Product.html">Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="AssignParty.html">AssignParty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link Active" href="#">ProductRate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Invoice.html">Invoice</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <span class="d-flex" id="logout">
+                    <!-- <a class="nav-link  btn-outline-success" href="#" id="logout">Logout</a> -->
+                    <button class="btn btn-outline-danger" onclick="Logout()">Logout</button>
+                </span>
+            </div>
+        </nav>
+
+        <div class="create" style="border: 1px solid black; padding: 5px 5px 10px 5px ;">
+            <h4>ProductRate</h4>
+            <select class="form-select" aria-label="Default select example" id="selectProduct"
+                style="width: 20vw; margin-left: 10px;">
+                <option selected>select product</option>
+            </select>
+            <br>
+            <br>
+            <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
+            <input type="number" placeholder="rate" style="width: 10vw; margin-left: 10px;" id="rate" min="0" />
+
+            <lable style="width: 10vw; margin-left: 10px;">DateTime :- </lable>
+            <input type="date" id="date" style="width: 10vw; margin-left: 10px;">
+
+            <button style="width: 10vw; margin:0 10px 20px 0;" onclick="createProductRate()">Create</button>
+        </div>
+        <br>
+        <div class="AssignList">
+            <table class="table table-primary table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">DateTime</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyList">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="model-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="People-name">Edit ProductRate</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" onclick="closeModel()">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="detail">
+                            <ul><br />
+                                <select class="form-select" aria-label="Default select example" id="selectProduct2"
+                                    style="width: 20vw; margin-left: 10px;">
+                                    <option selected>select product</option>
+                                </select>
+                                <br>
+                                <br>
+                                <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
+                                <input type="number" placeholder="rate" style="width: 10vw; margin-left: 10px;"
+                                    id="rate2" min="0" />
+                                <br /><br />
+                                <lable style="width: 10vw; margin-left: 10px;">DateTime :- </lable>
+                                <input type="date" id="date2" style="width: 10vw; margin-left: 10px;">
+                                <br /><br />
+                                <button style="width: 10vw; margin-left: 10px;" onclick="editFromModel()">Edit</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
