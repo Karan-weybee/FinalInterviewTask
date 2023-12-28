@@ -9,7 +9,8 @@
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script defer type="text/javascript" src="Invoice.js"></script>
+  <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="Invoice.js"></script>
   <style>
     .modal-header {
       margin-top: 30px;
@@ -129,7 +130,7 @@
               </div>
 
 
-              <table class="table table-primary table-striped-columns pre-scrollable">
+              <table class="table table-primary table-striped-columns pre-scrollable" id="InvoiceProduct">
                 <thead>
                   <tr>
                     <th scope="col">Id</th>
@@ -166,7 +167,7 @@
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
 
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+ 
   <script>
     $(document).ready(function () {
 

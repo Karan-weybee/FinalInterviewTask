@@ -196,6 +196,7 @@ async function fillInvoiceProducts() {
 
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
   }
+  $('#InvoiceProduct').DataTable();
 }
 
 function updateInvoiceProduct(productId) {
