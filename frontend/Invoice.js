@@ -186,9 +186,11 @@ async function fillInvoiceProducts() {
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
-   <td> <input type="number" placeholder="rate" style="width: 50px; margin-left: 10px;" id="rate${data[i].id}" min="0" value="${data[i].rateOfProduct}" readonly/></td>
+   <td> <input type="number" placeholder="rate" style="width: 50px; margin-left: 10px; background-color: rgb(184,218,255);
+   border: none;" id="rate${data[i].id}" min="0" value="${data[i].rateOfProduct}" readonly/></td>
    <td>  <input type="number" placeholder="Quantity" style="width: 40px; margin-left: 10px;" id="quantity${data[i].id}" min="0" value="${data[i].quantity}"/></td>
-   <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;" value="${data[i].dateOfInvoice}"></td>
+   <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;background-color: rgb(184,218,255);
+   border: none;" value="${data[i].dateOfInvoice}"></td>
    <td>${data[i].total}</td>
    <td><button id="${data[i].id}" class="edit-btn btn-outline-success" onclick="updateInvoiceProduct(id)">Update</button></td>
    <td><button id="${data[i].id}" class="del-btn btn-outline-danger" onclick="deleteProduct(id)">delete</button></td>

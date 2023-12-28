@@ -52,6 +52,12 @@ namespace PartyProductCore.Controllers
         {
             try
             {
+                var userAvailable = _context.Users.Where(x => x.Email == users.Email).FirstOrDefault();
+                if (userAvailable != null)
+                {
+                    return BadRequest("user is available Please login");
+                }
+
                 _context.Users.Add(users);
                 await _context.SaveChangesAsync();
 
