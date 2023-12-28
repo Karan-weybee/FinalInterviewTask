@@ -199,7 +199,7 @@ async function fillInvoiceProducts() {
   $('#InvoiceProduct').DataTable();
 }
 
-function updateInvoiceProduct(productId) {
+function updateInvoiceProduct(productId) { 
 
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
   var quantity = Number(document.getElementById(`quantity${productId}`).value);

@@ -1,6 +1,21 @@
-async function signin() {
-    var email = document.getElementById('userEmail').value;
-    var pass = document.getElementById('password').value;
+document.addEventListener('DOMContentLoaded', function () {
+  
+    var form = document.getElementById('LoginUser');
+
+    // Attach an event listener to the form for the submit event
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+      
+        var email = document.getElementById('userEmail').value;
+        var pass = document.getElementById('password').value;
+        
+        signin(email,pass);
+    
+})
+});
+
+async function signin(email,pass) {
+  
     var token;
     var data = await fetch("https://localhost:44357/api/Users/Login", {
         method: "POST",
