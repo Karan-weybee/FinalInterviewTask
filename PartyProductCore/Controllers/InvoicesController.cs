@@ -123,13 +123,9 @@ namespace PartyProductCore.Controllers
             {
                 if (IsProductInInvoice(invoicesDTO.ProductId, invoicesDTO.PartyId))
                 {
-                    await _context.Database.ExecuteSqlRawAsync("EXEC editInvoiceProduct @Rate_Of_Product,@Quantity,@Party_id, @Product_id,@Date",
-                         new SqlParameter("@Rate_Of_Product", invoicesDTO.RateOfProduct),
-                        new SqlParameter("@Quantity", invoicesDTO.Quantity),
-                        new SqlParameter("@Party_id", invoicesDTO.PartyId),
-                        new SqlParameter("@Product_id", invoicesDTO.ProductId),
-                        new SqlParameter("@Date", DateTime.Today.Date));
-                    return StatusCode(201, $"invoice Created");
+                    await EditProduct(invoicesDTO);
+
+                    return StatusCode(200, $"Product Edited");
                 }
                 else
                 {
@@ -193,6 +189,18 @@ namespace PartyProductCore.Controllers
         private bool ProductNameExists(string productName)
         {
             return _context.Products.Any(e => e.ProductName.Contains(productName));
+        }
+
+        public async Task<IActionResult> EditProduct(InvoiceDTO invoicesDTO)
+        {
+            await _context.Database.ExecuteSqlRawAsync("EXEC editInvoiceProduct @Rate_Of_Product,@Quantity,@Party_id, @Product_id,@Date",
+                        new SqlParameter("@Rate_Of_Product", invoicesDTO.RateOfProduct),
+                       new SqlParameter("@Quantity", invoicesDTO.Quantity),
+                       new SqlParameter("@Party_id", invoicesDTO.PartyId),
+                       new SqlParameter("@Product_id", invoicesDTO.ProductId),
+
+                       new SqlParameter("@Date", DateTime.Today.Date));
+            return Ok("Edit");
         }
     }
 }
