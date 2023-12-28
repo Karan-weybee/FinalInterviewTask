@@ -111,10 +111,10 @@ function deleteProduct(id) {
 
 function createInvoice() {
   if(party_Id != null){
-    var Party = Number(document.getElementById('selectParty3').value);
-  var Product = Number(document.getElementById('selectProduct3').value);
-  var rateOfProduct = Number(document.getElementById('rate3').value);
-  var quantity = Number(document.getElementById('quantity3').value);
+    var Party = Number(document.getElementById('selectPartyInModel').value);
+  var Product = Number(document.getElementById('selectProductInModel').value);
+  var rateOfProduct = Number(document.getElementById('rateInModel').value);
+  var quantity = Number(document.getElementById('quantityInModel').value);
   var date = new Date();
   }
   else{
@@ -159,8 +159,8 @@ async function edit(id) {
   party_Id = id
   document.getElementById('exampleModal').style.display = 'block';
   fillInvoiceProducts();
-  document.getElementById('selectParty3').innerHTML = ''
-  document.getElementById('selectParty3').innerHTML = "<option value=''>select This party</option>";
+  document.getElementById('selectPartyInModel').innerHTML = ''
+  document.getElementById('selectPartyInModel').innerHTML = "<option value=''>select This party</option>";
   const partyres = await fetch(`https://localhost:44357/api/Parties/${party_Id}`,{
     method: 'GET', // or 'POST', 'PUT', etc.
     headers:headers,
@@ -169,7 +169,7 @@ async function edit(id) {
   console.log(Partydata)
 
   var html1 = ` <option value="${Partydata.id}">${Partydata.partyName}</option>`;
-  document.getElementById('selectParty3').insertAdjacentHTML("beforeend", html1)
+  document.getElementById('selectPartyInModel').insertAdjacentHTML("beforeend", html1)
 
 }
 async function fillInvoiceProducts() {
@@ -188,7 +188,7 @@ async function fillInvoiceProducts() {
    <td>${data[i].productName}</td>
    <td> <input type="number" placeholder="rate" style="width: 50px; margin-left: 10px; background-color: rgb(184,218,255);
    border: none;" id="rate${data[i].id}" min="0" value="${data[i].rateOfProduct}" readonly/></td>
-   <td>  <input type="number" placeholder="Quantity" style="width: 40px; margin-left: 10px;" id="quantity${data[i].id}" min="0" value="${data[i].quantity}"/></td>
+   <td>  <input type="number" placeholder="Quantity" style="width: 40px; margin-left: 10px;" id="quantity${data[i].id}" min="1" value="${data[i].quantity}"/></td>
    <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;background-color: rgb(184,218,255);
    border: none;" value="${data[i].dateOfInvoice}"></td>
    <td>${data[i].total}</td>

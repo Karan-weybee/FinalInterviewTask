@@ -112,21 +112,21 @@
           </div>
           <div class="modal-body">
             <div class="detail">
-              <div class="create"> <select class="form-select" aria-label="Default select example" id="selectParty3"
-                  style="width: 20vw; margin: 10px;" onchange="fillProductData('selectParty3','selectProduct3')">
+              <div class="create"> <select class="form-select" aria-label="Default select example" id="selectPartyInModel"
+                  style="width: 20vw; margin: 10px;" onchange="fillProductData('selectPartyInModel','selectProductInModel')">
                   <option selected>select party</option>
                 </select>
-                <select class="form-select" aria-label="Default select example" id="selectProduct3"
-                  style="width: 20vw; margin: 10px;" onchange="fillRate('selectProduct3','rate3')">
+                <select class="form-select" aria-label="Default select example" id="selectProductInModel"
+                  style="width: 20vw; margin: 10px;" onchange="fillRate('selectProductInModel','rateInModel')">
                   <option selected>select product</option>
                 </select>
                 <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
-                <input type="number" placeholder="rate" style="width: 10vw; margin: 10px;" id="rate3" min="0"
+                <input type="number" placeholder="rate" style="width: 10vw; margin: 10px;" id="rateInModel" min="0"
                   readonly />
 
                 <lable style="width: 10vw; margin-left: 10px;">Quantity :- </lable>
-                <input type="number" placeholder="Quantity" style="width: 10vw; margin: 10px;" id="quantity3"
-                  min="0" />
+                <input type="number" placeholder="Quantity" style="width: 10vw; margin: 10px;" id="quantityInModel"
+                  min="1" />
                 <button type="button" class="btn addInModel" onclick="createInvoice()">Add product</button>
               </div>
 

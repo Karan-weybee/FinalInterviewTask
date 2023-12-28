@@ -28,6 +28,9 @@ async function signin(email,pass) {
         }
     })
         .then((response) => {
+            if(response.status==400){
+                alert("Invalid Email Or Password")
+            }
             return response.json();
         }).then(data => token = data);
 
