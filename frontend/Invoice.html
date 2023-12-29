@@ -10,7 +10,7 @@
 
   <link rel="stylesheet" type="text/css" href="style.css">
   <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-  <script type="text/javascript" src="Invoice.js"></script>
+
   <style>
     h4 {
       margin: 0 10px 10px 10px;
@@ -40,22 +40,24 @@
       display: flex;
       justify-content: center;
     }
-    .multiselect-dropdow{
+
+    .multiselect-dropdow {
       width: 15em;
     }
-    #searchProduct{
+
+    #searchProduct {
       right: 0;
       margin-right: 15px;
       position: absolute;
       z-index: 10;
     }
-    #InvoiceProduct_wrapper{
+
+    #InvoiceProduct_wrapper {
       z-index: 0;
     }
   </style>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
   <script defer type="text/javascript" src="script.js"></script>
-  <script defer type="text/javascript" src="Dropdown.js"></script>
 
 </head>
 
@@ -95,7 +97,51 @@
       </div>
     </nav>
 
-    <button type="button" class="btn add" onclick="create()">Add Invoice</button>
+    <!-- <button type="button" class="btn add" onclick="create()">Add Invoice</button> -->
+    <br>
+    <div class="create" style="padding: 5px 5px 10px 5px ;">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Party</label></b>
+        </div>
+        <div class="col-auto" style="margin-left: -25px;">
+          <select class="form-select" aria-label="Default select example" id="selectParty"
+            onchange="fillProductData('selectParty','selectProduct')"
+            style=" height: 34px; margin-left: 20px; width:11.7em">
+            <option selected>Select Party</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Product</label></b>
+        </div>
+        <div class="col-auto" style="margin-left: 2px;">
+          <select class="form-select" aria-label="Default select example" id="selectProduct"
+            onchange="fillRate('selectProduct','rate')" style=" height: 34px; width:11.7em">
+            <option selected>Select Product</option>
+          </select>
+        </div>
+      </div><br>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Rate</label></b>
+        </div>
+        <div class="col-auto" style="margin-left: -15px;">
+          <input type="number" placeholder="Rate" style=" margin-left: 15px;" id="rate" min="0"
+            disabled />
+        </div>
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Quantity</label></b>
+        </div>
+        <div class="col-auto" style="margin-left: -15px;">
+          <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantity"
+            min="1" />
+        </div>
+        <div class="col-auto" style="margin-left: -5px;">
+          <button class="btn btn-outline-success" onclick="createInvoice()">Create</button>
+        </div>
+      </div>
+    </div>
+
     <div class="AssignList">
       <table class="table" id="bodyList">
         <thead class="table-light">
@@ -169,20 +215,15 @@
               </div>
               <!-- multiple  -->
               <span id="searchProduct">
-              <label>Search </label>
-              <select style="width: 30em;" name="field2" id="field2" multiple multiselect-search="true"
-                multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
-                <option>Abarth</option>
-                <option>Alfa Romeo</option>
-                <option>Aston Martin</option>
-                <option>Audi</option>
-                <option>Bentley</option>
-                <option>BMW</option>
-                <option>Bugatti</option>
-                <option>Cadillac</option>
+                <label>Search </label>
+                <select style="width: 30em;" name="field2" id="field2" multiple multiselect-search="true"
+                  multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
+                  <!-- <option>Tv1</option>
+                <option>Fan</option> -->
 
-              </select>
-            </span>
+                </select>
+              </span>
+
               <script>
                 function selecteProducts() {
                   const select = document.getElementById('field2');
@@ -193,16 +234,31 @@
                       selectedOptions.push(option.value);
                     }
                   }
-                  console.log(selectedOptions)
+                  // console.log(selectedOptions)
+                  searchProduct(selectedOptions);
                 }
-                // document.getElementById('field2')
+                var data;
+                const headerss = new Headers();
+                headerss.append('Authorization', `Bearer ${localStorage.getItem('tokenName')}`);
+                headerss.append('Content-Type', 'application/json');
+
+                fetch("https://localhost:44357/api/Products", {
+                  method: 'GET', // or 'POST', 'PUT', etc.
+                  headers: headerss,
+                }).then(res => res.json()).then(data=>{
+                  for (let i = 0; i < data.length; i++) {
+                  var html = `<option>${data[i].productName}</option>`
+                  document.getElementById('field2').insertAdjacentHTML("beforeend", html);
+                }
+                });
+
               </script>
               <!-- multi select  -->
               <!-- <table class="table table-primary table-striped-columns pre-scrollable" id="InvoiceProduct"> -->
               <table class="table" id="InvoiceProduct">
                 <thead class="table-light">
                   <tr>
-                    <th scope="col">Id</th>
+                    <th scope="col" onclick="sortId()">Id</th>
                     <th scope="col">Product Name</th>
                     <th scope="col">Rate Of Product</th>
                     <th scope="col">Quantity</th>
@@ -223,6 +279,8 @@
       </div>
     </div>
   </div>
+
+
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
@@ -236,7 +294,8 @@
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
 
-
+  <script type="text/javascript" src="Invoice.js"></script>
+  <script defer type="text/javascript" src="Dropdown.js"></script>
   <script>
     $(document).ready(function () {
 
@@ -278,6 +337,7 @@
       }
       xmlhttp.send();
     })
+
   </script>
 </body>
 

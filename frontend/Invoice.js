@@ -14,7 +14,7 @@ loadInvoiceData();
 async function fillPartyData(selectParty) {
   const partyres = await fetch("https://localhost:44357/api/Parties", {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   Partydata = await partyres.json();
   console.log(Partydata)
@@ -27,17 +27,18 @@ async function fillPartyData(selectParty) {
 }
 
 async function fillProductData(selectParty, selectProduct) {
+
   var PartyId = Number(document.getElementById(selectParty).value);
   const res = await fetch(`https://localhost:44357/api/Parties/${PartyId}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   data = await res.json();
   console.log(data.partyName)
 
   const Assignres = await fetch("https://localhost:44357/api/AssignParties", {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   var Assigndata = await Assignres.json();
 
@@ -52,7 +53,7 @@ async function fillProductData(selectParty, selectProduct) {
 
   const Productres = await fetch("https://localhost:44357/api/Products", {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   var Productdata = await Productres.json();
 
@@ -69,11 +70,14 @@ async function fillProductData(selectParty, selectProduct) {
   document.getElementById(selectProduct).innerHTML = '';
   var html2 = ` <option >Select Products</option>`;
   document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html2)
-
+  
+  // document.getElementById('field2').innerHTML = '';
   for (let i = 0; i < productId.length; i++) {
-
-    var html1 = ` <option value="${productId[i]}">${productNames[i]}</option>`;
-    document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html1)
+   
+      var html1 = ` <option value="${productId[i]}">${productNames[i]}</option>`;
+      document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html1);
+    
+   
   }
 }
 
@@ -82,18 +86,18 @@ async function fillRate(selectProduct, rate) {
   console.log(ProductId)
   const res = await fetch(`https://localhost:44357/api/Products/${ProductId}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   data = await res.json();
   console.log(data)
 
   const ProductRatesres = await fetch(`https://localhost:44357/api/ProductRates`, {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   var ProductRatedata = await ProductRatesres.json();
   var product = ProductRatedata.findLast((element) => element.productName == data.productName);
-console.log(ProductRatedata)
+  console.log(ProductRatedata)
   document.getElementById(rate).value = product.rate;
 }
 
@@ -105,24 +109,24 @@ function deleteProduct(id) {
   fetch(`https://localhost:44357/api/invoices?partyId=${party_Id}&productId=${id}`, {
     method: "DELETE",
     headers: headers
-  }).then(req => fillInvoiceProducts())
+  }).then(req => fillInvoiceProducts(''))
 
 }
 
 function createInvoice() {
-  if(party_Id != null){
+  if (party_Id != null) {
     var Party = Number(document.getElementById('selectPartyInModel').value);
-  var Product = Number(document.getElementById('selectProductInModel').value);
-  var rateOfProduct = Number(document.getElementById('rateInModel').value);
-  var quantity = Number(document.getElementById('quantityInModel').value);
-  var date = new Date();
+    var Product = Number(document.getElementById('selectProductInModel').value);
+    var rateOfProduct = Number(document.getElementById('rateInModel').value);
+    var quantity = Number(document.getElementById('quantityInModel').value);
+    var date = new Date();
   }
-  else{
-  var Party = Number(document.getElementById('selectParty').value);
-  var Product = Number(document.getElementById('selectProduct').value);
-  var rateOfProduct = Number(document.getElementById('rate').value);
-  var quantity = Number(document.getElementById('quantity').value);
-  var date = document.getElementById('date').value;
+  else {
+    var Party = Number(document.getElementById('selectParty').value);
+    var Product = Number(document.getElementById('selectProduct').value);
+    var rateOfProduct = Number(document.getElementById('rate').value);
+    var quantity = Number(document.getElementById('quantity').value);
+    var date = new Date();
   }
 
   fetch("https://localhost:44357/api/invoices", {
@@ -137,10 +141,10 @@ function createInvoice() {
     headers: headers
   })
     .then((response) => {
-      if(party_Id != null){
-        fillInvoiceProducts();
+      if (party_Id != null) {
+        fillInvoiceProducts('');
       }
-      else{window.location.href = "/Invoice.html"}
+      else { window.location.href = "/Invoice.html" }
     });
   console.log("created")
 
@@ -150,7 +154,7 @@ function createInvoice() {
 function closeModel() {
   console.log('close')
   $('.fade').hide();
-  party_Id=null;
+  party_Id = null;
   location.reload();
 }
 
@@ -158,13 +162,15 @@ async function edit(id) {
   console.log(id)
   party_Id = id
   document.getElementById('exampleModal').style.display = 'block';
-  fillInvoiceProducts();
-  $('#InvoiceProduct').DataTable({searching: false});
+ 
+  fillInvoiceProducts('');
+  $('#InvoiceProduct').DataTable({ searching: false });
+
   document.getElementById('selectPartyInModel').innerHTML = ''
   document.getElementById('selectPartyInModel').innerHTML = "<option value=''>Select Party</option>";
-  const partyres = await fetch(`https://localhost:44357/api/Parties/${party_Id}`,{
+  const partyres = await fetch(`https://localhost:44357/api/Parties/${party_Id}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
+    headers: headers,
   });
   Partydata = await partyres.json();
   console.log(Partydata)
@@ -173,16 +179,38 @@ async function edit(id) {
   document.getElementById('selectPartyInModel').insertAdjacentHTML("beforeend", html1)
 
 }
-async function fillInvoiceProducts() {
+async function fillInvoiceProducts(products) {
+  let res
+  var details = [];
+  details.length = products.length;
+  if (products == '') {
+    res = await fetch(`https://localhost:44357/api/invoices/${party_Id}`, {
+      method: 'GET', // or 'POST', 'PUT', etc.
+      headers: headers,
+    });
+    data = await res.json();
+  }
+  else {
+    for (let i = 0; i < products.length; i++) {
+      res = await fetch(`https://localhost:44357/api/Invoices/Search?partyId=${party_Id}&productName=${products[i]}`, {
+        method: 'GET', // or 'POST', 'PUT', etc.
+        headers: headers,
+      });
+      details[i] = await res.json();
 
-  const res = await fetch(`https://localhost:44357/api/invoices/${party_Id}`,{
-    method: 'GET', // or 'POST', 'PUT', etc.
-    headers:headers,
-  });
-  data = await res.json();
+    }
+    data = []
+    for (let i = 0; i < details.length; i++) {
+      data.push(details[i][0]);
+    }
+    console.log(data)
+
+  }
+  document.getElementById('ProductList').innerHTML = ''
+
   console.log("----------------")
   console.log(data)
-  document.getElementById('ProductList').innerHTML = ''
+
   for (let i = 0; i < data.length; i++) {
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
@@ -203,8 +231,8 @@ async function fillInvoiceProducts() {
   // $('#InvoiceProduct').DataTable({searching: false});
 }
 
-function updateInvoiceProduct(quantity) { 
-  let productId =  quantity.slice(8,quantity.length);
+function updateInvoiceProduct(quantity) {
+  let productId = quantity.slice(8, quantity.length);
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
   var quantity = Number(document.getElementById(`quantity${productId}`).value);
   var date = document.getElementById(`date${productId}`).value;
@@ -220,10 +248,18 @@ function updateInvoiceProduct(quantity) {
       dateOfInvoice: date
     }),
     headers: headers
-  }).then(req => fillInvoiceProducts());
+  }).then(req => fillInvoiceProducts(''));
 
 }
+function searchProduct(selectedOptions) {
+  console.log(selectedOptions);
+  fillInvoiceProducts(selectedOptions);
+  
+}
 
+function sortId() {
+  console.log("id sort")
+}
 function view(partyid) {
   localStorage.setItem("partyId", partyid);
   window.location.href = "/GenerateInvoice.html";

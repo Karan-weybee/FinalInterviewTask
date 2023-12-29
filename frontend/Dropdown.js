@@ -89,11 +89,11 @@ function MultiselectDropdown(options){
   var config={
     search:true,
     height:'15rem',
-    placeholder:'Select',
-    txtSelected:'selected',
+    placeholder:'Select Products',
+    txtSelected:'Selected',
     txtAll:'All',
     txtRemove: 'Remove',
-    txtSearch:'search',
+    txtSearch:'Search',
     ...options
   };
   function newEl(tag,attrs){
