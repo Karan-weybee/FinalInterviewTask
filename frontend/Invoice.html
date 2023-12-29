@@ -106,7 +106,7 @@
         </div>
         <div class="col-auto" style="margin-left: -25px;">
           <select class="form-select" aria-label="Default select example" id="selectParty"
-            onchange="fillProductData('selectParty','selectProduct')"
+            onchange="fillProductData(id,'selectProduct')"
             style=" height: 34px; margin-left: 20px; width:11.7em">
             <option selected>Select Party</option>
           </select>
@@ -116,7 +116,7 @@
         </div>
         <div class="col-auto" style="margin-left: 2px;">
           <select class="form-select" aria-label="Default select example" id="selectProduct"
-            onchange="fillRate('selectProduct','rate')" style=" height: 34px; width:11.7em">
+            onchange="fillRate(id,'rate')" style=" height: 34px; width:11.7em">
             <option selected>Select Product</option>
           </select>
         </div>
@@ -178,7 +178,7 @@
                   </div>
                   <div class="col-auto" style="margin-left: -25px;">
                     <select class="form-select" aria-label="Default select example" id="selectPartyInModel"
-                      onchange="fillProductData('selectPartyInModel','selectProductInModel')"
+                      onchange="fillProductData(id,'selectProductInModel')"
                       style=" height: 34px; margin-left: 20px; width:11.7em">
                       <option selected>Select Party</option>
                     </select>
@@ -188,7 +188,7 @@
                   </div>
                   <div class="col-auto" style="margin-left: 2px;">
                     <select class="form-select" aria-label="Default select example" id="selectProductInModel"
-                      onchange="fillRate('selectProductInModel','rateInModel')" style=" height: 34px; width:11.7em">
+                      onchange="fillRate(id,'rateInModel')" style=" height: 34px; width:11.7em">
                       <option selected>Select Product</option>
                     </select>
                   </div>
@@ -258,12 +258,12 @@
               <table class="table" id="InvoiceProduct">
                 <thead class="table-light">
                   <tr>
-                    <th scope="col" onclick="sortId()">Id</th>
-                    <th scope="col">Product Name</th>
+                    <th scope="col" id="sortId" dataSet="0" onclick="sortId()">Id</th>
+                    <th scope="col" id="sortProductName" dataSet="0" onclick="sortProductName()">Product Name</th>
                     <th scope="col">Rate Of Product</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Total</th>
+                    <th scope="col" id="total">Total</th>
                     <!-- <th scope="col">Edit</th> -->
                     <th scope="col">Delete</th>
                   </tr>

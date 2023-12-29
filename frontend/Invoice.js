@@ -12,15 +12,15 @@ async function loadInvoiceData() {
 loadInvoiceData();
 
 async function fillPartyData(selectParty) {
-  try{
-  const partyres = await fetch("https://localhost:44357/api/Parties", {
-    method: 'GET', // or 'POST', 'PUT', etc.
-    headers: headers,
-  });
-  
-  Partydata = await partyres.json();
-  console.log(Partydata)
-  }catch(error){
+  try {
+    const partyres = await fetch("https://localhost:44357/api/Parties", {
+      method: 'GET', // or 'POST', 'PUT', etc.
+      headers: headers,
+    });
+
+    Partydata = await partyres.json();
+    console.log(Partydata)
+  } catch (error) {
     window.location.href = "/Register.html"
   }
   for (let i = 0; i < Partydata.length; i++) {
@@ -74,14 +74,13 @@ async function fillProductData(selectParty, selectProduct) {
   document.getElementById(selectProduct).innerHTML = '';
   var html2 = ` <option >Select Products</option>`;
   document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html2)
-  
-  // document.getElementById('field2').innerHTML = '';
+
   for (let i = 0; i < productId.length; i++) {
-   
-      var html1 = ` <option value="${productId[i]}">${productNames[i]}</option>`;
-      document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html1);
-    
-   
+
+    var html1 = ` <option value="${productId[i]}">${productNames[i]}</option>`;
+    document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html1);
+
+
   }
 }
 
@@ -166,9 +165,10 @@ async function edit(id) {
   console.log(id)
   party_Id = id
   document.getElementById('exampleModal').style.display = 'block';
- 
+
   fillInvoiceProducts('');
   $('#InvoiceProduct').DataTable({ searching: false });
+  document.getElementById('total').innerHTML='';
 
   document.getElementById('selectPartyInModel').innerHTML = ''
   document.getElementById('selectPartyInModel').innerHTML = "<option value=''>Select Party</option>";
@@ -210,11 +210,17 @@ async function fillInvoiceProducts(products) {
     console.log(data)
 
   }
-  document.getElementById('ProductList').innerHTML = ''
-
+  
   console.log("----------------")
   console.log(data)
 
+  fillModelData(data);
+
+  // $('#InvoiceProduct').DataTable({searching: false});
+}
+
+function fillModelData(data) {
+  document.getElementById('ProductList').innerHTML = ''
   for (let i = 0; i < data.length; i++) {
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
@@ -232,9 +238,7 @@ async function fillInvoiceProducts(products) {
 
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
   }
-  // $('#InvoiceProduct').DataTable({searching: false});
 }
-
 function updateInvoiceProduct(quantity) {
   let productId = quantity.slice(8, quantity.length);
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
@@ -258,11 +262,37 @@ function updateInvoiceProduct(quantity) {
 function searchProduct(selectedOptions) {
   console.log(selectedOptions);
   fillInvoiceProducts(selectedOptions);
-  
+
 }
 
-function sortId() {
-  console.log("id sort")
+async function sortId() {
+
+  var dataset = document.getElementById('sortId').getAttribute('dataSet');
+
+  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=Id`, {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers: headers,
+  });
+  var data = await res.json();
+  fillModelData(data);
+ console.log(data)
+  dataset=="0"? document.getElementById('sortId').setAttribute('dataSet', 1): document.getElementById('sortId').setAttribute('dataSet', 0);
+  
+}
+async function sortProductName() {
+  console.log("pr name sort")
+ 
+  var dataset = document.getElementById('sortProductName').getAttribute('dataSet');
+
+  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=ProductName`, {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers: headers,
+  });
+  var data = await res.json();
+  fillModelData(data);
+
+  dataset=="0"? document.getElementById('sortProductName').setAttribute('dataSet', 1): document.getElementById('sortProductName').setAttribute('dataSet', 0);
+  
 }
 function view(partyid) {
   localStorage.setItem("partyId", partyid);
