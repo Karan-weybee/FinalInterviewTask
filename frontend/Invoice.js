@@ -167,7 +167,7 @@ async function edit(id) {
   document.getElementById('exampleModal').style.display = 'block';
 
   fillInvoiceProducts('');
-  $('#InvoiceProduct').DataTable({ searching: false });
+  $('#InvoiceProduct').DataTable({ searching: false,paging:false});
   document.getElementById('total').innerHTML='';
 
   document.getElementById('selectPartyInModel').innerHTML = ''
@@ -220,8 +220,11 @@ async function fillInvoiceProducts(products) {
 }
 
 function fillModelData(data) {
+  var size=Number(document.getElementById('Size').value);
+  var index= data.length>size?size:data.length;;
+
   document.getElementById('ProductList').innerHTML = ''
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < index; i++) {
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
@@ -301,4 +304,36 @@ function view(partyid) {
 
 function create() {
   window.location.href = "/CreateInvoice.html";
+}
+async function nextPage(){
+  var size=Number(document.getElementById('Size').value);
+  console.log(size)
+  console.log("next")
+  var currentPage = Number(document.getElementById('indexPage').innerHTML);
+  currentPage++;
+  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}`, {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers: headers,
+  });
+  var data = await res.json();
+  fillModelData(data);
+
+  document.getElementById('indexPage').innerHTML=currentPage;
+}
+async function prevPage(){
+  var size=Number(document.getElementById('Size').value);
+  console.log("prev")
+  var currentPage = Number(document.getElementById('indexPage').innerHTML);
+  currentPage--;
+  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}`, {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers: headers,
+  });
+  var data = await res.json();
+  fillModelData(data);
+
+  document.getElementById('indexPage').innerHTML=currentPage;
+}
+function changeSize(){
+  fillInvoiceProducts('');
 }

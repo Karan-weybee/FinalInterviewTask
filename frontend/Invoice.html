@@ -46,14 +46,32 @@
     }
 
     #searchProduct {
-      right: 0;
+      /* right: 0; */
+      float: right;
       margin-right: 15px;
-      position: absolute;
+      /* position: absolute; */
       z-index: 10;
     }
 
     #InvoiceProduct_wrapper {
       z-index: 0;
+    }
+
+    #Size {
+      height: 34px;
+      width: 58px;
+    }
+
+    #InvoiceProduct_paginate a {
+      text-decoration: none;
+    }
+
+    #indexPage {
+      margin: 0 10px 0 10px;
+    }
+
+    #pagination {
+      float: right;
     }
   </style>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
@@ -106,8 +124,7 @@
         </div>
         <div class="col-auto" style="margin-left: -25px;">
           <select class="form-select" aria-label="Default select example" id="selectParty"
-            onchange="fillProductData(id,'selectProduct')"
-            style=" height: 34px; margin-left: 20px; width:11.7em">
+            onchange="fillProductData(id,'selectProduct')" style=" height: 34px; margin-left: 20px; width:11.7em">
             <option selected>Select Party</option>
           </select>
         </div>
@@ -126,15 +143,13 @@
           <b><label class="col-form-label setFont">Rate</label></b>
         </div>
         <div class="col-auto" style="margin-left: -15px;">
-          <input type="number" placeholder="Rate" style=" margin-left: 15px;" id="rate" min="0"
-            disabled />
+          <input type="number" placeholder="Rate" style=" margin-left: 15px;" id="rate" min="0" disabled />
         </div>
         <div class="col-auto">
           <b><label class="col-form-label setFont">Quantity</label></b>
         </div>
         <div class="col-auto" style="margin-left: -15px;">
-          <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantity"
-            min="1" />
+          <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantity" min="1" />
         </div>
         <div class="col-auto" style="margin-left: -5px;">
           <button class="btn btn-outline-success" onclick="createInvoice()">Create</button>
@@ -213,8 +228,19 @@
                   </div>
                 </div>
               </div>
+              <!-- pagination -->
+              <label>Show <select name="InvoiceProduct_length" aria-controls="InvoiceProduct" class="" id="Size" onchange="changeSize()">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select> </label>
               <!-- multiple  -->
               <span id="searchProduct">
+
                 <label>Search </label>
                 <select style="width: 30em;" name="field2" id="field2" multiple multiselect-search="true"
                   multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
@@ -245,11 +271,11 @@
                 fetch("https://localhost:44357/api/Products", {
                   method: 'GET', // or 'POST', 'PUT', etc.
                   headers: headerss,
-                }).then(res => res.json()).then(data=>{
+                }).then(res => res.json()).then(data => {
                   for (let i = 0; i < data.length; i++) {
-                  var html = `<option>${data[i].productName}</option>`
-                  document.getElementById('field2').insertAdjacentHTML("beforeend", html);
-                }
+                    var html = `<option>${data[i].productName}</option>`
+                    document.getElementById('field2').insertAdjacentHTML("beforeend", html);
+                  }
                 });
 
               </script>
@@ -272,6 +298,15 @@
 
                 </tbody>
               </table>
+              <div class="dataTables_paginate paging_simple_numbers">
+                <span id="pagination">
+                  <button id="prevPage" class="btn btn-outline-info" aria-controls="InvoiceProduct" aria-disabled="true"
+                    role="link" data-dt-idx="previous" tabindex="-1" id="nextPage"
+                    onclick="prevPage()">Previous</button><span id="indexPage">1</span><button
+                    class="btn btn-outline-info" aria-controls="InvoiceProduct" aria-disabled="true" role="link"
+                    data-dt-idx="next" tabindex="1" id="nextPage" onclick="nextPage()">Next </button>
+                </span>
+              </div>
             </div>
           </div>
         </div>

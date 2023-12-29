@@ -1,79 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    
-<link rel="stylesheet" type="text/css" href="style.css">
-<script defer type="text/javascript" src="Partyscript.js"></script>
-<script defer type="text/javascript" src="script.js"></script>
-<style>
-    
-    
-    h4{
-        margin-left: 10px;
-    }
-    #model-content {
-     position: fixed;
-    }
-    
-</style>
-</head>
-<body>
-    <div class="container">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Home</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 3em;">
-              <li class="nav-item">
-                <a class="nav-link Active" aria-current="page" href="#">Party</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="Product.html">Product</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="AssignParty.html">Assign Party</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="ProductRate.html">Product Rate</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="Invoice.html">Invoice</a>
-              </li>
-            </ul>
-          </div>
-          <span class="d-flex" id="logout">
-            <!-- <a class="nav-link  btn-outline-success" href="#" id="logout">Logout</a> -->
-            <button class="btn btn-outline-danger" onclick="Logout()">Logout</button>
-          </span>
-        </div>
-      </nav>
 
-      <div class="create" style="padding: 5px 5px 10px 5px ;">
-        <br>
-        <div class="row g-3 align-items-center">
-          <div class="col-auto">
-            <b><label class="col-form-label setFont">Party</label></b>
-          </div>
-          <div class="col-auto" style="margin-left: -15px;">
-            <input id="partyName" class="form-control" type="text" aria-label="input example" style=" margin-left: 10px;" placeholder="Enter Party Name">
-          </div>
-          <button class="btn btn-outline-success" onclick="createParty()" style="margin-left: 10px;">Create</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script defer type="text/javascript" src="Partyscript.js"></script>
+  <script defer type="text/javascript" src="script.js"></script>
+  <style>
+    h4 {
+      margin-left: 10px;
+    }
+
+    #model-content {
+      position: fixed;
+    }
+    .trigger{
+      text-align: center;
+    padding: 7px 13px;
+    background: #3e3e3e;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-family: cursive;
+}
+
+.modalPopup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-contentPopup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+.close-buttonPopup {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
+}
+.close-buttonPopup:hover {
+    background-color: darkgray;
+}
+.show-modalPopup {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 3em;">
+            <li class="nav-item">
+              <a class="nav-link Active" aria-current="page" href="#">Party</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Product.html">Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="AssignParty.html">Assign Party</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ProductRate.html">Product Rate</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Invoice.html">Invoice</a>
+            </li>
+          </ul>
+        </div>
+        <span class="d-flex" id="logout">
+          <!-- <a class="nav-link  btn-outline-success" href="#" id="logout">Logout</a> -->
+          <button class="btn btn-outline-danger" onclick="Logout()">Logout</button>
+        </span>
+      </div>
+    </nav>
+
+    <div class="create" style="padding: 5px 5px 10px 5px ;">
+      <br>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Party</label></b>
+        </div>
+        <div class="col-auto" style="margin-left: -15px;">
+          <input id="partyName" class="form-control" type="text" aria-label="input example" style=" margin-left: 10px;"
+            placeholder="Enter Party Name">
+        </div>
+        <button class="btn btn-outline-success" onclick="createParty()" style="margin-left: 10px;">Create</button>
+      </div>
+    </div>
+
+    <br>
+    <div class="PartyList">
+      <!-- model  -->
+      <button class="trigger">Click the modal!</button>
+      <div class="modalPopup">
+        <div class="modal-contentPopup">
+          <span class="close-buttonPopup">×</span>
+          <h1>Hello, I am a modal!</h1>
         </div>
       </div>
 
-      <br>
-      <div class="PartyList">
       <!-- <table class="table table-primary table-striped-columns" style="background-color: #eef0f3;"> -->
-        <table class="table">
-          <thead class="table-light">
+      <table class="table" id="partyTable">
+        <thead class="table-light">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
@@ -82,56 +146,83 @@
           </tr>
         </thead>
         <tbody id="bodyList">
-        
+
         </tbody>
       </table>
     </div>
-    
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
         <div class="modal-content" id="model-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="People-name">Edit Party</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" onclick="closeModel()">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="detail">
-                    <div class="edit" style="padding: 5px 5px 10px 5px ;">
-                      <div class="row g-3 align-items-center">
-                        <div class="col-auto">
-                          <b><label class="col-form-label setFont">Party</label></b>
-                        </div>
-                        <div class="col-auto" style="margin-left: -15px;">
-                          <input id="partyNameEdit" class="form-control" type="text" aria-label="input example" style=" margin-left: 10px;" placeholder="Enter Party Name">
-                        </div>
-                      </div><br>
-                      <div class="row g-3 align-items-center">
-                        <div class="col-auto">
-                          <b><label class="col-form-label setFont" style="visibility: hidden;">Party</label></b>
-                        </div>
-                        <div class="col-auto" style="margin-left: -15px;">
-                      <button class="btn btn-outline-success" style=" margin-left: 10px;" onclick="editFromModel()">Edit</button>
-                    </div>
-                    </div>
-                    </div>
+          <div class="modal-header">
+            <h3 class="modal-title" id="People-name">Edit Party</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" onclick="closeModel()">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="detail">
+              <div class="edit" style="padding: 5px 5px 10px 5px ;">
+                <div class="row g-3 align-items-center">
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont">Party</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: -15px;">
+                    <input id="partyNameEdit" class="form-control" type="text" aria-label="input example"
+                      style=" margin-left: 10px;" placeholder="Enter Party Name">
+                  </div>
+                </div><br>
+                <div class="row g-3 align-items-center">
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont" style="visibility: hidden;">Party</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: -15px;">
+                    <button class="btn btn-outline-success" style=" margin-left: 10px;"
+                      onclick="editFromModel()">Edit</button>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-       
+
+      </div>
     </div>
-</div>
-</div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
- integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
- </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
 
+  <script>
+    var modal = document.querySelector(".modalPopup");
+    var trigger = document.querySelector(".trigger");
+    var closeButton = document.querySelector(".close-buttonPopup");
+
+    function toggleModal() {
+      modal.classList.toggle("show-modalPopup");
+    }
+
+    function windowOnClick(event) {
+      if (event.target === modal) {
+        toggleModal();
+      }
+    }
+
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
+
+  </script>
 </body>
+
 </html>

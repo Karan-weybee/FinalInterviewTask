@@ -28,6 +28,7 @@ async function loadPartyDate() {
 
     document.getElementById('bodyList').insertAdjacentHTML("beforeend", html)
   }
+  document.getElementById('#partyTable').DataTable();
 }
 
 loadPartyDate();

@@ -143,7 +143,7 @@ namespace PartyProductCore.Controllers
             {
                 var SortData = data.OrderBy(x => x.ProductName);
 
-                if (toggle == 1)
+                if (toggle == 0)
                 {
                     SortData = data.OrderByDescending(x => x.ProductName);
                 }
@@ -154,7 +154,7 @@ namespace PartyProductCore.Controllers
             {
                 var SortData = data.OrderBy(x => x.id);
 
-                if (toggle == 1)
+                if (toggle == 0)
                 {
                     SortData = data.OrderByDescending(x => x.id);
                 }
@@ -165,6 +165,35 @@ namespace PartyProductCore.Controllers
 
         }
 
+        [HttpGet("Page/{id}")]
+        public async Task<ActionResult> GetInvoices(int id, [FromQuery] int size, int pageIndex)
+        {
+            int StartIndex = size * (pageIndex - 1);
+            int EndIndex = size * pageIndex;
+            List<invoiceProducts> data = new List<invoiceProducts>();
+
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice ORDER BY Product_id OFFSET @start ROWS FETCH NEXT @end ROWS ONLY", _connection))
+            {
+                command.Parameters.AddWithValue("@partyId", id);
+                command.Parameters.AddWithValue("@start", StartIndex);
+                command.Parameters.AddWithValue("@end", EndIndex);
+
+                _connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        //data.Add(reader.GetString(0));
+                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                    }
+                }
+                _connection.Close();
+            }
+
+            return Ok(data);
+
+        }
         // POST: api/Invoices
         [HttpPost]
         public async Task<ActionResult<InvoiceDTO>> PostInvoices(InvoiceDTO invoicesDTO)
