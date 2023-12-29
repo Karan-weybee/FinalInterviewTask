@@ -90,24 +90,78 @@ namespace PartyProductCore.Controllers
         }
 
         [HttpGet("Search")]
-        public async Task<ActionResult<List<Invoices>>> GetInvoices([FromQuery] int partyId, string productName, DateTime dateTime)
+        public async Task<ActionResult> GetInvoices([FromQuery] int partyId, string productName)
         {
 
-            // return Ok(partyId + ":-" + productName + ":-" + dateTime);
-            string formattedDateTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
-            List<Invoices> invoices = new List<Invoices>();
-            formattedDateTime = formattedDateTime == "0001-01-01 00:00:00" ? "" : formattedDateTime;
-            productName = productName == null ? "" : productName;
+            List<invoiceProducts> data = new List<invoiceProducts>();
 
-            invoices = await _context.Invoices.FromSqlRaw(
-        "EXEC GetInvoiceFromProductNameAndDate @partyId, @productName, @DateOfInvoice",
-        new SqlParameter("@partyId", partyId),
-        new SqlParameter("@productName", productName),
-        new SqlParameter("@DateOfInvoice", formattedDateTime)
-    ).ToListAsync();
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and pr.ProductName in (@productName) group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
+            {
+                command.Parameters.AddWithValue("@partyId", partyId);
+                command.Parameters.AddWithValue("@productName", productName);
+                _connection.Open();
 
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        //data.Add(reader.GetString(0));
+                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                    }
+                }
+                _connection.Close();
+            }
 
-            return Ok(invoices);
+            return Ok(data);
+
+        }
+
+        [HttpGet("Sort")]
+        public async Task<ActionResult> GetInvoicesSortData([FromQuery] int partyId, string sortField, int toggle)
+        {
+
+            List<invoiceProducts> data = new List<invoiceProducts>();
+
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
+            {
+                command.Parameters.AddWithValue("@partyId", partyId);
+                //command.Parameters.AddWithValue("@toggle", toggle);
+                _connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        //data.Add(reader.GetString(0));
+                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                    }
+                }
+                _connection.Close();
+            }
+
+            if (sortField == "ProductName")
+            {
+                var SortData = data.OrderBy(x => x.ProductName);
+
+                if (toggle == 1)
+                {
+                    SortData = data.OrderByDescending(x => x.ProductName);
+                }
+
+                return Ok(SortData);
+            }
+            else
+            {
+                var SortData = data.OrderBy(x => x.id);
+
+                if (toggle == 1)
+                {
+                    SortData = data.OrderByDescending(x => x.id);
+                }
+
+                return Ok(SortData);
+            }
+            return Ok(data);
 
         }
 
