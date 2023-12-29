@@ -12,13 +12,17 @@ async function loadInvoiceData() {
 loadInvoiceData();
 
 async function fillPartyData(selectParty) {
+  try{
   const partyres = await fetch("https://localhost:44357/api/Parties", {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers: headers,
   });
+  
   Partydata = await partyres.json();
   console.log(Partydata)
-
+  }catch(error){
+    window.location.href = "/Register.html"
+  }
   for (let i = 0; i < Partydata.length; i++) {
 
     var html1 = ` <option value="${Partydata[i].id}">${Partydata[i].partyName}</option>`;

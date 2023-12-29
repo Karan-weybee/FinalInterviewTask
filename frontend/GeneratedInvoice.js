@@ -59,15 +59,17 @@ async function InvoiceProducts(){
        var total =Number(document.getElementById('total').innerHTML);
       var paid=Number(document.getElementById('paid').innerHTML=0);
        document.getElementById('balance').innerHTML=total-paid
-
-    
-      
     }
     
 InvoiceTotal();
 
 document.getElementById('download').addEventListener('click',
 function(){
-    window.print();
+  const element = document.querySelector('.main'); // Choose the parent element that wraps your invoice content
+  html2pdf(element);
 }
 );
+document.getElementById('back').addEventListener('click',
+function(){
+  window.location.href = "/Invoice.html"
+});
