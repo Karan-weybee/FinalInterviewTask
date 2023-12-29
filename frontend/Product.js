@@ -20,8 +20,8 @@ async function loadproductDate(){
    var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
-   <td><button id="${data[i].id}" class="edit-btn btn btn-outline-success" onclick="edit(id)">Edit</button></td>
-   <td><button id="/${data[i].id}" class="del-btn btn btn-outline-danger"  onclick="deleteproduct(id)">Delete</button></td>
+   <td><button id="${data[i].id}" class=" btn btn-outline-primary" onclick="edit(id)">Edit</button></td>
+   <td><button id="/${data[i].id}" class=" btn btn-outline-danger"  onclick="deleteproduct(id)">Delete</button></td>
  </tr>`;
 
  document.getElementById('bodyList').insertAdjacentHTML("beforeend",html)

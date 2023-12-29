@@ -12,15 +12,14 @@
 <script defer type="text/javascript" src="script.js"></script>
 <style>
     
-    .modal-header{
-        margin-top: 30px;
-    }
+    
     h4{
         margin-left: 10px;
     }
     #model-content {
      position: fixed;
     }
+    
 </style>
 </head>
 <body>
@@ -40,10 +39,10 @@
                 <a class="nav-link" href="Product.html">Product</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="AssignParty.html">AssignParty</a>
+                <a class="nav-link" href="AssignParty.html">Assign Party</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="ProductRate.html">ProductRate</a>
+                <a class="nav-link" href="ProductRate.html">Product Rate</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="Invoice.html">Invoice</a>
@@ -57,18 +56,24 @@
         </div>
       </nav>
 
-      <div class="create" style="border: 1px solid black; padding: 5px 5px 10px 5px ;">
-        <h4 >Party</h4>
-
-     <p>
-        <input id="partyName" class="form-control" type="text" aria-label="input example" style="width: 40vw; margin-left: 10px;" placeholder="Enter partyName"><br>
-        <button style="width: 10vw; margin:0 10px 10px 10px;" onclick="createParty()">Create</button>
-    </p>
+      <div class="create" style="padding: 5px 5px 10px 5px ;">
+        <br>
+        <div class="row g-3 align-items-center">
+          <div class="col-auto">
+            <b><label class="col-form-label setFont">Party</label></b>
+          </div>
+          <div class="col-auto" style="margin-left: -15px;">
+            <input id="partyName" class="form-control" type="text" aria-label="input example" style=" margin-left: 10px;" placeholder="Enter Party Name">
+          </div>
+          <button class="btn btn-outline-success" onclick="createParty()" style="margin-left: 10px;">Create</button>
+        </div>
       </div>
+
       <br>
       <div class="PartyList">
-      <table class="table table-primary table-striped-columns">
-        <thead>
+      <!-- <table class="table table-primary table-striped-columns" style="background-color: #eef0f3;"> -->
+        <table class="table">
+          <thead class="table-light">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
@@ -94,10 +99,24 @@
             </div>
             <div class="modal-body">
                 <div class="detail">
-                    <ul>
-                        <input id="partyNameEdit" class="form-control" type="text" aria-label="input example" style="width: 88%;" placeholder="Enter partyName"><br>
-        <button style="width: 10vw;" onclick="editFromModel()">Edit</button>
-                    </ul>
+                    <div class="edit" style="padding: 5px 5px 10px 5px ;">
+                      <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                          <b><label class="col-form-label setFont">Party</label></b>
+                        </div>
+                        <div class="col-auto" style="margin-left: -15px;">
+                          <input id="partyNameEdit" class="form-control" type="text" aria-label="input example" style=" margin-left: 10px;" placeholder="Enter Party Name">
+                        </div>
+                      </div><br>
+                      <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                          <b><label class="col-form-label setFont" style="visibility: hidden;">Party</label></b>
+                        </div>
+                        <div class="col-auto" style="margin-left: -15px;">
+                      <button class="btn btn-outline-success" style=" margin-left: 10px;" onclick="editFromModel()">Edit</button>
+                    </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>

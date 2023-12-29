@@ -22,8 +22,8 @@ async function loadProductaRateData(){
    <td>${data[i].productName}</td>
    <td>${data[i].rate}</td>
    <td>${data[i].dateOfRate}</td>
-   <td><button id="${data[i].id}" class="edit-btn btn btn-outline-success" onclick="edit(id)">Edit</button></td>
-   <td><button id="/${data[i].id}" class="del-btn btn btn-outline-danger"  onclick="deleteProductRate(id)">Delete</button></td>
+   <td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="edit(id)">Edit</button></td>
+   <td><button id="/${data[i].id}" class="btn btn-outline-danger"  onclick="deleteProductRate(id)">Delete</button></td>
  </tr>`;
 
  document.getElementById('bodyList').insertAdjacentHTML("beforeend",html)

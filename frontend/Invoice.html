@@ -12,15 +12,13 @@
   <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
   <script type="text/javascript" src="Invoice.js"></script>
   <style>
-    
-
     h4 {
       margin: 0 10px 10px 10px;
     }
 
     #model-content {
       width: 173%;
-     position: fixed;
+      position: fixed;
     }
 
     .add {
@@ -32,17 +30,32 @@
       margin: 0px 10px 20px 10px;
       background-color: rgb(231, 163, 80);
     }
-    .create{
-      border: 2px solid black;
+
+    .create {
+      /* border: 2px solid black; */
       margin-bottom: 30px;
     }
-    .modal-dialog{
+
+    .modal-dialog {
       display: flex;
       justify-content: center;
+    }
+    .multiselect-dropdow{
+      width: 15em;
+    }
+    #searchProduct{
+      right: 0;
+      margin-right: 15px;
+      position: absolute;
+      z-index: 10;
+    }
+    #InvoiceProduct_wrapper{
+      z-index: 0;
     }
   </style>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
   <script defer type="text/javascript" src="script.js"></script>
+  <script defer type="text/javascript" src="Dropdown.js"></script>
 
 </head>
 
@@ -64,10 +77,10 @@
               <a class="nav-link" href="Product.html">Product</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="AssignParty.html">AssignParty</a>
+              <a class="nav-link" href="AssignParty.html">Assign Party</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="ProductRate.html">ProductRate</a>
+              <a class="nav-link" href="ProductRate.html">Product Rate</a>
             </li>
             <li class="nav-item">
               <a class="nav-link Active" href="#">Invoice</a>
@@ -84,8 +97,8 @@
 
     <button type="button" class="btn add" onclick="create()">Add Invoice</button>
     <div class="AssignList">
-      <table class="table table-primary table-striped-columns" id="bodyList">
-        <thead>
+      <table class="table" id="bodyList">
+        <thead class="table-light">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Party Name</th>
@@ -112,27 +125,82 @@
           </div>
           <div class="modal-body">
             <div class="detail">
-              <div class="create"> <select class="form-select" aria-label="Default select example" id="selectPartyInModel"
-                  style="width: 20vw; margin: 10px;" onchange="fillProductData('selectPartyInModel','selectProductInModel')">
-                  <option selected>select party</option>
-                </select>
-                <select class="form-select" aria-label="Default select example" id="selectProductInModel"
-                  style="width: 20vw; margin: 10px;" onchange="fillRate('selectProductInModel','rateInModel')">
-                  <option selected>select product</option>
-                </select>
-                <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
-                <input type="number" placeholder="rate" style="width: 10vw; margin: 10px;" id="rateInModel" min="0"
-                  readonly />
-
-                <lable style="width: 10vw; margin-left: 10px;">Quantity :- </lable>
-                <input type="number" placeholder="Quantity" style="width: 10vw; margin: 10px;" id="quantityInModel"
-                  min="1" />
-                <button type="button" class="btn addInModel" onclick="createInvoice()">Add product</button>
+              <div class="create" style="padding: 5px 5px 10px 5px ;">
+                <div class="row g-3 align-items-center">
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont">Party</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: -25px;">
+                    <select class="form-select" aria-label="Default select example" id="selectPartyInModel"
+                      onchange="fillProductData('selectPartyInModel','selectProductInModel')"
+                      style=" height: 34px; margin-left: 20px; width:11.7em">
+                      <option selected>Select Party</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont">Product</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: 2px;">
+                    <select class="form-select" aria-label="Default select example" id="selectProductInModel"
+                      onchange="fillRate('selectProductInModel','rateInModel')" style=" height: 34px; width:11.7em">
+                      <option selected>Select Product</option>
+                    </select>
+                  </div>
+                </div><br>
+                <div class="row g-3 align-items-center">
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont">Rate</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: -15px;">
+                    <input type="number" placeholder="Rate" style=" margin-left: 15px;" id="rateInModel" min="0"
+                      disabled />
+                  </div>
+                  <div class="col-auto">
+                    <b><label class="col-form-label setFont">Quantity</label></b>
+                  </div>
+                  <div class="col-auto" style="margin-left: -15px;">
+                    <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantityInModel"
+                      min="1" />
+                  </div>
+                  <div class="col-auto" style="margin-left: -5px;">
+                    <button class="btn btn-outline-success" onclick="createInvoice()">Create</button>
+                  </div>
+                </div>
               </div>
+              <!-- multiple  -->
+              <span id="searchProduct">
+              <label>Search </label>
+              <select style="width: 30em;" name="field2" id="field2" multiple multiselect-search="true"
+                multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
+                <option>Abarth</option>
+                <option>Alfa Romeo</option>
+                <option>Aston Martin</option>
+                <option>Audi</option>
+                <option>Bentley</option>
+                <option>BMW</option>
+                <option>Bugatti</option>
+                <option>Cadillac</option>
 
+              </select>
+            </span>
+              <script>
+                function selecteProducts() {
+                  const select = document.getElementById('field2');
+                  const selectedOptions = [];
 
-              <table class="table table-primary table-striped-columns pre-scrollable" id="InvoiceProduct">
-                <thead>
+                  for (const option of select.options) {
+                    if (option.selected) {
+                      selectedOptions.push(option.value);
+                    }
+                  }
+                  console.log(selectedOptions)
+                }
+                // document.getElementById('field2')
+              </script>
+              <!-- multi select  -->
+              <!-- <table class="table table-primary table-striped-columns pre-scrollable" id="InvoiceProduct"> -->
+              <table class="table" id="InvoiceProduct">
+                <thead class="table-light">
                   <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Product Name</th>
@@ -140,7 +208,7 @@
                     <th scope="col">Quantity</th>
                     <th scope="col">Date</th>
                     <th scope="col">Total</th>
-                    <th scope="col">Edit</th>
+                    <!-- <th scope="col">Edit</th> -->
                     <th scope="col">Delete</th>
                   </tr>
                 </thead>
@@ -168,14 +236,14 @@
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
 
- 
+
   <script>
     $(document).ready(function () {
 
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", "https://localhost:44357/api/invoices",true);
+      xmlhttp.open("GET", "https://localhost:44357/api/invoices", true);
       xmlhttp.onreadystatechange = function () {
-      
+
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var persons = JSON.parse(xmlhttp.responseText);
           $("#bodyList").DataTable({
@@ -189,22 +257,22 @@
                 "title": "Edit",
                 render: function (data, type, full) {
                   return `<td>
-                <button id="${full.id}" class="edit-btn btn btn-outline-success" onclick="edit(this.id)">Edit</button>
+                <button id="${full.id}" class=" btn btn-outline-primary" onclick="edit(this.id)">Edit</button>
             </td>`}
               },
               {
                 "title": "Details",
                 render: function (data, type, full) {
                   return `
-            <td><button class="btn btn-secondary" id="${full.id}" onclick="view(this.id)">View</button>
+            <td><button class="btn btn-outline-secondary" id="${full.id}" onclick="view(this.id)">View</button>
                 </td>`}
               }
             ],
 
           });
         }
-        if(xmlhttp.status == 401){
-         window.location.href = "/Register.html"
+        if (xmlhttp.status == 401) {
+          window.location.href = "/Register.html"
         }
 
       }

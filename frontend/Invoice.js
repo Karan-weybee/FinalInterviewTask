@@ -67,7 +67,7 @@ async function fillProductData(selectParty, selectProduct) {
   }
   console.log(productId)
   document.getElementById(selectProduct).innerHTML = '';
-  var html2 = ` <option >select products</option>`;
+  var html2 = ` <option >Select Products</option>`;
   document.getElementById(selectProduct).insertAdjacentHTML("beforeend", html2)
 
   for (let i = 0; i < productId.length; i++) {
@@ -159,8 +159,9 @@ async function edit(id) {
   party_Id = id
   document.getElementById('exampleModal').style.display = 'block';
   fillInvoiceProducts();
+  $('#InvoiceProduct').DataTable({searching: false});
   document.getElementById('selectPartyInModel').innerHTML = ''
-  document.getElementById('selectPartyInModel').innerHTML = "<option value=''>select This party</option>";
+  document.getElementById('selectPartyInModel').innerHTML = "<option value=''>Select Party</option>";
   const partyres = await fetch(`https://localhost:44357/api/Parties/${party_Id}`,{
     method: 'GET', // or 'POST', 'PUT', etc.
     headers:headers,
@@ -186,23 +187,24 @@ async function fillInvoiceProducts() {
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
-   <td> <input type="number" placeholder="rate" style="width: 50px; margin-left: 10px; background-color: rgb(184,218,255);
+   <td> <input type="number" placeholder="rate" style="width: 61px; margin-left: 10px;
    border: none;" id="rate${data[i].id}" min="0" value="${data[i].rateOfProduct}" readonly/></td>
-   <td>  <input type="number" placeholder="Quantity" style="width: 40px; margin-left: 10px;" id="quantity${data[i].id}" min="1" value="${data[i].quantity}"/></td>
-   <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;background-color: rgb(184,218,255);
+   <td>  <input type="number" placeholder="Quantity" style="width: 60px; margin-left: 10px;" 
+        id="quantity${data[i].id}" min="1" value="${data[i].quantity}" oninput="updateInvoiceProduct(id)"/></td>
+   <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;
    border: none;" value="${data[i].dateOfInvoice}"></td>
    <td>${data[i].total}</td>
-   <td><button id="${data[i].id}" class="edit-btn btn-outline-success" onclick="updateInvoiceProduct(id)">Update</button></td>
-   <td><button id="${data[i].id}" class="del-btn btn-outline-danger" onclick="deleteProduct(id)">delete</button></td>
+   <!--<td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="updateInvoiceProduct(id)">Update</button></td>-->
+   <td><button id="${data[i].id}" class="btn btn-outline-danger" onclick="deleteProduct(id)">delete</button></td>
  </tr>`;
 
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
   }
-  $('#InvoiceProduct').DataTable();
+  // $('#InvoiceProduct').DataTable({searching: false});
 }
 
-function updateInvoiceProduct(productId) { 
-
+function updateInvoiceProduct(quantity) { 
+  let productId =  quantity.slice(8,quantity.length);
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
   var quantity = Number(document.getElementById(`quantity${productId}`).value);
   var date = document.getElementById(`date${productId}`).value;

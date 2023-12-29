@@ -12,10 +12,6 @@
     <script defer type="text/javascript" src="ProductRate.js"></script>
     <script defer type="text/javascript" src="script.js"></script>
     <style>
-        .modal-header {
-            margin-top: 30px;
-        }
-
         h4 {
             margin: 0 10px 15px 10px;
         }
@@ -45,10 +41,10 @@
                             <a class="nav-link" href="Product.html">Product</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="AssignParty.html">AssignParty</a>
+                            <a class="nav-link" href="AssignParty.html">Assign Party</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link Active" href="#">ProductRate</a>
+                            <a class="nav-link Active" href="#">Product Rate</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="Invoice.html">Invoice</a>
@@ -63,26 +59,38 @@
             </div>
         </nav>
 
-        <div class="create" style="border: 1px solid black; padding: 5px 5px 10px 5px ;">
-            <h4>ProductRate</h4>
-            <select class="form-select" aria-label="Default select example" id="selectProduct"
-                style="width: 20vw; margin-left: 10px;">
-                <option selected>select product</option>
-            </select>
+        <div class="create" style="padding: 5px 5px 10px 5px ;">
             <br>
-            <br>
-            <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
-            <input type="number" placeholder="rate" style="width: 10vw; margin-left: 10px;" id="rate" min="0" />
-
-            <lable style="width: 10vw; margin-left: 10px;">DateTime :- </lable>
-            <input type="date" id="date" style="width: 10vw; margin-left: 10px;">
-
-            <button style="width: 10vw; margin:0 10px 20px 0;" onclick="createProductRate()">Create</button>
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <b><label class="col-form-label setFont">Product</label></b>
+                </div>
+                <div class="col-auto" style="margin-left: -15px;">
+                    <select class="form-select" aria-label="Default select example" id="selectProduct"
+                        style="height: 40px;">
+                        <option selected>Select Product</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <b><label class="col-form-label setFont">Rate</label></b>
+                </div>
+                <div class="col-auto" style="margin-left: -15px;">
+                    <input type="number" placeholder="Rate" style=" margin-left: 10px;" id="rate" min="0" />
+                </div>
+                <div class="col-auto">
+                    <b><label class="col-form-label setFont">Date</label></b>
+                </div>
+                <div class="col-auto" style="margin-left: -15px;">
+                    <input type="date" placeholder="Date" style=" margin-left: 10px;" id="date" />
+                </div>
+                <button class="btn btn-outline-success" onclick="createProductRate()"
+                    style="margin-left: 10px;">Create</button>
+            </div>
         </div>
         <br>
         <div class="AssignList">
-            <table class="table table-primary table-striped-columns">
-                <thead>
+            <table class="table">
+                <thead class="table-light">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Product Name</th>
@@ -103,29 +111,51 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content" id="model-content">
                     <div class="modal-header">
-                        <h3 class="modal-title" id="People-name">Edit ProductRate</h3>
+                        <h3 class="modal-title" id="People-name">Edit Product Rate</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" onclick="closeModel()">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="detail">
-                            <ul><br />
-                                <select class="form-select" aria-label="Default select example" id="selectProduct2"
-                                    style="width: 20vw; margin-left: 10px;">
-                                    <option selected>select product</option>
-                                </select>
-                                <br>
-                                <br>
-                                <lable style="width: 10vw; margin-left: 10px;">Rate :- </lable>
-                                <input type="number" placeholder="rate" style="width: 10vw; margin-left: 10px;"
-                                    id="rate2" min="0" />
-                                <br /><br />
-                                <lable style="width: 10vw; margin-left: 10px;">DateTime :- </lable>
-                                <input type="date" id="date2" style="width: 10vw; margin-left: 10px;">
-                                <br /><br />
-                                <button style="width: 10vw; margin-left: 10px;" onclick="editFromModel()">Edit</button>
-                            </ul>
+                            <div class="edit" style="padding: 5px 5px 10px 5px ;">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-auto">
+                                        <b><label class="col-form-label setFont">Product</label></b>
+                                    </div>
+                                    <div class="col-auto" style="margin-left: -15px;">
+                                        <select class="form-select" aria-label="Default select example"
+                                            id="selectProduct2" style="height: 34px;" disabled>
+                                            <option selected>Select Product</option>
+                                        </select>
+                                    </div>
+                                </div><br>
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-auto">
+                                        <b><label class="col-form-label setFont">Rate</label></b>
+                                    </div>
+                                    <div class="col-auto" style="margin-left: -15px;">
+                                        <input type="number" placeholder="Rate" style=" margin-left: 10px;" id="rate2" min="0" />
+                                    </div>
+                                </div><br>
+                                 <div class="row g-3 align-items-center">
+                                    <div class="col-auto">
+                                        <b><label class="col-form-label setFont">Date</label></b>
+                                    </div>
+                                    <div class="col-auto" style="margin-left: -15px;">
+                                        <input type="date" placeholder="Date" style=" margin-left: 10px;" id="date2"/>
+                                    </div>
+                                </div><br>
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-auto">
+                                        <b><label class="col-form-label setFont"
+                                                style="visibility: hidden;">Product</label></b>
+                                    </div>
+                                    <div class="col-auto" style="margin-left: -32px;">
+                                        <button class="btn btn-outline-success" onclick="editFromModel()">Edit</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
