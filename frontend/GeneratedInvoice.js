@@ -36,7 +36,7 @@ async function InvoiceProducts(){
    </tr>`;
   
    document.getElementById('productsList').insertAdjacentHTML("beforeend",html);
-   date=data[i].dateOfInvoice;
+   date=convertToIndianDateFormat(data[i].dateOfInvoice);
      }
      document.getElementById('date').innerHTML=date;
   }

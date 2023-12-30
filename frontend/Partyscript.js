@@ -33,15 +33,22 @@ async function loadPartyDate() {
 
 loadPartyDate();
 
+function deleteConfirm(isDelete){
+  modal.classList.toggle("show-modalPopup");
 
-function deleteParty(id) {
-  id = id.slice(1, id.length)
-  console.log(id)
+  if(isDelete != 'flase'){
+  console.log(isDelete)
 
-  fetch(`https://localhost:44357/api/Parties/${id}`, {
+  fetch(`https://localhost:44357/api/Parties/${isDelete}`, {
     method: "DELETE",
     headers: headers
   }).then(res => location.reload())
+  }
+}
+
+function deleteParty(id) {
+  id = id.slice(1, id.length)
+   toggleModal(id);
 
 }
 
@@ -56,7 +63,11 @@ function createParty() {
     }),
     headers: headers
   })
-    .then((response) => location.reload());
+    .then((response) => {
+      if(response.status != 400){
+      sessionStorage.setItem("Created", "party");}
+      location.reload()
+    });
 
 }
 

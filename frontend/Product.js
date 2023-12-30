@@ -30,15 +30,24 @@ async function loadproductDate(){
 
 loadproductDate();
 
+function deleteConfirm(isDelete){
+  modal.classList.toggle("show-modalPopup");
 
-function deleteproduct(id){
-    id=id.slice(1,id.length)
-    console.log(id)
-   
-    fetch(`https://localhost:44357/api/Products/${id}`, {
+  if(isDelete != 'flase'){
+  console.log(isDelete)
+
+  fetch(`https://localhost:44357/api/Products/${isDelete}`, {
       method: "DELETE",
       headers: headers
     }).then(res=>location.reload())
+  }
+}
+
+function deleteproduct(id){
+  id = id.slice(1, id.length)
+  toggleModal(id);
+   
+   
      
 }
 
@@ -53,7 +62,11 @@ function createproduct(){
   }),
   headers:headers
 })
-  .then((response) => location.reload());
+  .then((response) =>{
+    if(response.status != 400){
+    sessionStorage.setItem("Created", "product");}
+    location.reload()
+  });
 }
 
 function closeModel(){

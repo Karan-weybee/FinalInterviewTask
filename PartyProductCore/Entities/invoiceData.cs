@@ -9,8 +9,8 @@ namespace PartyProductCore.Entities
     public class invoiceData
     {
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
         public decimal Total { get; set; }
-        public string partyName { get; set; }
+        public string PartyName { get; set; }
     }
 }

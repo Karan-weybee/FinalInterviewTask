@@ -144,6 +144,9 @@ function createInvoice() {
     headers: headers
   })
     .then((response) => {
+      if(response.status != 400){
+      sessionStorage.setItem("Created", "invoice");}
+    
       if (party_Id != null) {
         fillInvoiceProducts('');
       }
@@ -168,7 +171,6 @@ async function edit(id) {
 
   fillInvoiceProducts('');
   $('#InvoiceProduct').DataTable({ searching: false,paging:false});
-  document.getElementById('total').innerHTML='';
 
   document.getElementById('selectPartyInModel').innerHTML = ''
   document.getElementById('selectPartyInModel').innerHTML = "<option value=''>Select Party</option>";
@@ -208,7 +210,7 @@ async function fillInvoiceProducts(products) {
       data.push(details[i][0]);
     }
     console.log(data)
-
+    fillModelData(data);
   }
   
   console.log("----------------")
@@ -232,24 +234,24 @@ function fillModelData(data) {
    border: none;" id="rate${data[i].id}" min="0" value="${data[i].rateOfProduct}" readonly/></td>
    <td>  <input type="number" placeholder="Quantity" style="width: 60px; margin-left: 10px;" 
         id="quantity${data[i].id}" min="1" value="${data[i].quantity}" oninput="updateInvoiceProduct(id)"/></td>
-   <td> <input type="text" id="date${data[i].id}" style="width: 7vw; margin-left: 10px;
+   <td> <input type="text" id="date${data[i].id}" style="width: 8.5vw; margin-left: 10px;
    border: none;" value="${data[i].dateOfInvoice}"></td>
    <td>${data[i].total}</td>
    <!--<td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="updateInvoiceProduct(id)">Update</button></td>-->
-   <td><button id="${data[i].id}" class="btn btn-outline-danger" onclick="deleteProduct(id)">delete</button></td>
+   <td><button id="${data[i].id}" class="btn btn-outline-danger" onclick="deleteProduct(id)">Delete</button></td>
  </tr>`;
 
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
   }
 }
 function updateInvoiceProduct(quantity) {
-  let productId = quantity.slice(8, quantity.length);
+  var productId = quantity.slice(8, quantity.length);
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
   var quantity = Number(document.getElementById(`quantity${productId}`).value);
   var date = document.getElementById(`date${productId}`).value;
   party_Id = Number(party_Id);
   productId = Number(productId)
-  console.log("quantity :- " + quantity)
+  console.log("quantity :- " + productId)
   fetch(`https://localhost:44357/api/invoices/${party_Id}`, {
     method: "PUT",
     body: JSON.stringify({
@@ -335,5 +337,5 @@ async function prevPage(){
   document.getElementById('indexPage').innerHTML=currentPage;
 }
 function changeSize(){
-  fillInvoiceProducts('');
+  selecteProducts();
 }

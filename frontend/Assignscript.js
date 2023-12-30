@@ -110,15 +110,25 @@ async function fillProductData(selectProduct){
    }
 }
 
-function deleteAssign(id){
-    id=id.slice(1,id.length)
-    console.log(id)
-   
-    fetch(`https://localhost:44357/api/AssignParties/${id}`, {
-      method: "DELETE",
-      headers: headers
+function deleteConfirm(isDelete){
+  modal.classList.toggle("show-modalPopup");
 
-    }).then(res=>location.reload());
+  if(isDelete != 'flase'){
+  console.log(isDelete)
+
+  fetch(`https://localhost:44357/api/AssignParties/${isDelete}`, {
+    method: "DELETE",
+    headers: headers
+
+  }).then(res=>location.reload());
+  }
+}
+
+function deleteAssign(id){
+  id = id.slice(1, id.length)
+  toggleModal(id);
+
+   
 }
 
 function createAssign(){
@@ -133,7 +143,11 @@ function createAssign(){
   }),
       headers:headers 
 })
-  .then((response) => location.reload());
+  .then((response) => {
+    if(response.status != 400){
+    sessionStorage.setItem("Created", "assign");}
+    location.reload()
+  });
 }
 
 function closeModel(){

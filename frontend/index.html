@@ -19,59 +19,18 @@
     #model-content {
       position: fixed;
     }
-    .trigger{
+
+    .trigger {
       text-align: center;
-    padding: 7px 13px;
-    background: #3e3e3e;
-    color: #fff;
-    font-size: 15px;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    font-family: cursive;
-}
-
-.modalPopup {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.1);
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-}
-.modal-contentPopup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 1rem 1.5rem;
-    width: 24rem;
-    border-radius: 0.5rem;
-}
-.close-buttonPopup {
-    float: right;
-    width: 1.5rem;
-    line-height: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    background-color: lightgray;
-}
-.close-buttonPopup:hover {
-    background-color: darkgray;
-}
-.show-modalPopup {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1.0);
-    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-}
-
+      padding: 7px 13px;
+      background: #3e3e3e;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      font-family: cursive;
+    }
   </style>
 </head>
 
@@ -123,15 +82,17 @@
         <button class="btn btn-outline-success" onclick="createParty()" style="margin-left: 10px;">Create</button>
       </div>
     </div>
-
+    <div class="conform"><span class="message" id="party">New Party Created Successfully</span></div>
     <br>
     <div class="PartyList">
       <!-- model  -->
-      <button class="trigger">Click the modal!</button>
+
       <div class="modalPopup">
         <div class="modal-contentPopup">
-          <span class="close-buttonPopup">×</span>
-          <h1>Hello, I am a modal!</h1>
+          <!-- <span class="close-buttonPopup">×</span> -->
+          <div id="delMessage">"Are you sure you want to delete?"</div><br>
+          <div class="conformation" id="conformation">
+          </div>
         </div>
       </div>
 
@@ -204,24 +165,9 @@
     crossorigin="anonymous"></script>
 
   <script>
-    var modal = document.querySelector(".modalPopup");
-    var trigger = document.querySelector(".trigger");
-    var closeButton = document.querySelector(".close-buttonPopup");
-
-    function toggleModal() {
-      modal.classList.toggle("show-modalPopup");
+    function trigger() {
+      toggleModal();
     }
-
-    function windowOnClick(event) {
-      if (event.target === modal) {
-        toggleModal();
-      }
-    }
-
-    trigger.addEventListener("click", toggleModal);
-    closeButton.addEventListener("click", toggleModal);
-    window.addEventListener("click", windowOnClick);
-
   </script>
 </body>
 

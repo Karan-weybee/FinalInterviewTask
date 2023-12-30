@@ -7,7 +7,7 @@ namespace PartyProductCore.Entities
 {
     public class invoiceProducts
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
         public decimal RateOfProduct { get; set; }
 

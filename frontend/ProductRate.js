@@ -21,7 +21,7 @@ async function loadProductaRateData(){
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
    <td>${data[i].rate}</td>
-   <td>${data[i].dateOfRate}</td>
+   <td>${convertToIndianDateFormat(data[i].dateOfRate)}</td>
    <td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="edit(id)">Edit</button></td>
    <td><button id="/${data[i].id}" class="btn btn-outline-danger"  onclick="deleteProductRate(id)">Delete</button></td>
  </tr>`;
@@ -88,15 +88,24 @@ async function fillProductData(selectProduct){
    }
 }
 
-function deleteProductRate(id){
-    id=id.slice(1,id.length)
-    console.log(id)
-   
-    fetch(`https://localhost:44357/api/ProductRates/${id}`, {
+function deleteConfirm(isDelete){
+  modal.classList.toggle("show-modalPopup");
+
+  if(isDelete != 'flase'){
+  console.log(isDelete)
+
+   fetch(`https://localhost:44357/api/ProductRates/${isDelete}`, {
       method: "DELETE",
       headers: headers
     })
      .then(x=>location.reload())
+  }
+}
+function deleteProductRate(id){
+  id = id.slice(1, id.length)
+  toggleModal(id);
+   
+   
     
 }
 
@@ -115,7 +124,11 @@ function createProductRate(){
   }),
   headers: headers
 })
-  .then((response) => location.reload());
+  .then((response) => {
+    if(response.status != 400){
+    sessionStorage.setItem("Created", "productRate");}
+    location.reload()
+  });
   console.log("Assigned")
 }
 

@@ -52,7 +52,7 @@ namespace PartyProductCore.Controllers
                     while (reader.Read())
                     {
                         //data.Add(reader.GetString(0));
-                        data.Add(new invoiceData { id = reader.GetInt32(0), Total = reader.GetDecimal(1), partyName = reader.GetString(2) });
+                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2) });
                     }
                 }
                 _connection.Close();
@@ -79,7 +79,7 @@ namespace PartyProductCore.Controllers
                     while (reader.Read())
                     {
                         //data.Add(reader.GetString(0));
-                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                        data.Add(new invoiceProducts { Id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
                     }
                 }
                 _connection.Close();
@@ -106,7 +106,7 @@ namespace PartyProductCore.Controllers
                     while (reader.Read())
                     {
                         //data.Add(reader.GetString(0));
-                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                        data.Add(new invoiceProducts { Id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
                     }
                 }
                 _connection.Close();
@@ -133,7 +133,7 @@ namespace PartyProductCore.Controllers
                     while (reader.Read())
                     {
                         //data.Add(reader.GetString(0));
-                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                        data.Add(new invoiceProducts { Id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
                     }
                 }
                 _connection.Close();
@@ -152,11 +152,11 @@ namespace PartyProductCore.Controllers
             }
             else
             {
-                var SortData = data.OrderBy(x => x.id);
+                var SortData = data.OrderBy(x => x.Id);
 
                 if (toggle == 0)
                 {
-                    SortData = data.OrderByDescending(x => x.id);
+                    SortData = data.OrderByDescending(x => x.Id);
                 }
 
                 return Ok(SortData);
@@ -185,7 +185,7 @@ namespace PartyProductCore.Controllers
                     while (reader.Read())
                     {
                         //data.Add(reader.GetString(0));
-                        data.Add(new invoiceProducts { id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
+                        data.Add(new invoiceProducts { Id = reader.GetInt32(0), RateOfProduct = reader.GetDecimal(1), Quantity = reader.GetInt32(2), Total = reader.GetDecimal(3), ProductName = reader.GetString(4), DateOfInvoice = reader.GetDateTime(5) });
                     }
                 }
                 _connection.Close();
@@ -233,19 +233,16 @@ namespace PartyProductCore.Controllers
         public async Task<ActionResult<invoiceProducts>> PutInvoices(int id, invoiceProducts invoiceProduct)
         {
 
-            try
-            {
-                await _context.Database.ExecuteSqlRawAsync("EXEC UpdateInvoice @partyid,@Rate_Of_Product, @Quantity,@Product_id,@Date",
-                     new SqlParameter("@partyid", id),
-                     new SqlParameter("@Rate_Of_Product", invoiceProduct.RateOfProduct),
-                     new SqlParameter("@Quantity", invoiceProduct.Quantity),
-                     new SqlParameter("@Product_id", invoiceProduct.id),
-                     new SqlParameter("@Date", DateTime.Today.Date));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            await _context.Database.ExecuteSqlRawAsync("EXEC UpdateInvoice @partyid,@Rate_Of_Product, @Quantity,@Product_id,@Date",
+                 new SqlParameter("@partyid", id),
+                 new SqlParameter("@Rate_Of_Product", invoiceProduct.RateOfProduct),
+                 new SqlParameter("@Quantity", invoiceProduct.Quantity),
+                 new SqlParameter("@Product_id", invoiceProduct.Id),
+                 new SqlParameter("@Date", DateTime.Today.Date));
+
+
+
             return StatusCode(201, $"invoice updated Successfully");
         }
 
