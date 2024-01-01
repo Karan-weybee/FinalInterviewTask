@@ -382,7 +382,7 @@ async function nextPage(){
   console.log("next")
   var currentPage = Number(document.getElementById('indexPage').innerHTML);
   currentPage++;
-  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}`, {
+  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}&date=${year}-${month}-${day}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers: headers,
   });
@@ -396,7 +396,7 @@ async function prevPage(){
   console.log("prev")
   var currentPage = Number(document.getElementById('indexPage').innerHTML);
   currentPage--;
-  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}`, {
+  res = await fetch(`https://localhost:44357/api/Invoices/Page/${party_Id}?size=${size}&pageIndex=${currentPage}&date=${year}-${month}-${day}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers: headers,
   });

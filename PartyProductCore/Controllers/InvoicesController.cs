@@ -194,17 +194,18 @@ namespace PartyProductCore.Controllers
         }
 
         [HttpGet("Page/{id}")]
-        public async Task<ActionResult> GetInvoices(int id, [FromQuery] int size, int pageIndex)
+        public async Task<ActionResult> GetInvoices(int id, [FromQuery] int size, int pageIndex, DateTime date)
         {
             int StartIndex = size * (pageIndex - 1);
             int EndIndex = size * pageIndex;
             List<invoiceProducts> data = new List<invoiceProducts>();
 
-            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice ORDER BY Product_id OFFSET @start ROWS FETCH NEXT @end ROWS ONLY", _connection))
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and DateOfInvoice=@Date group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice ORDER BY Product_id OFFSET @start ROWS FETCH NEXT @end ROWS ONLY", _connection))
             {
                 command.Parameters.AddWithValue("@partyId", id);
                 command.Parameters.AddWithValue("@start", StartIndex);
                 command.Parameters.AddWithValue("@end", EndIndex);
+                command.Parameters.AddWithValue("@Date", date);
 
                 _connection.Open();
 
