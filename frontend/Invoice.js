@@ -1,16 +1,61 @@
 
 var data;
 var party_Id;
+var year,month,day;
 const headers = new Headers();
 headers.append('Authorization', `Bearer ${localStorage.getItem('tokenName')}`);
 headers.append('Content-Type', 'application/json');
 
 async function loadInvoiceData() {
+  const res = await fetch("https://localhost:44357/api/invoices", {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers:headers,
+  });
+  if(res.status==401){
+    window.location.href = "/Register.html"
+  }
+    data = await res.json();
+   console.log(data)
+
+   loadInvoiceList(data);
   fillPartyData('selectParty');
 }
 
 loadInvoiceData();
 
+async function RangeInvoice(){
+  var startDate = document.getElementById('StartDate').value;
+  var endDate = document.getElementById('EndDate').value;
+
+  const res = await fetch(`https://localhost:44357/api/invoices/Range?StartDate=${startDate}&EndDate=${endDate}`, {
+    method: 'GET', // or 'POST', 'PUT', etc.
+    headers:headers,
+  });
+  if(res.status==401){
+    window.location.href = "/Register.html"
+  }
+    data = await res.json();
+   console.log(data)
+   loadInvoiceList(data);
+}
+
+function loadInvoiceList(data){
+  document.getElementById('bodyList').innerHTML='';
+  for(let i=0;i<data.length;i++){
+    var d = new Date(data[i].dateOfInvoice);
+    var html = `<tr>
+    <td>${data[i].id}</td>
+    <td>${data[i].partyName}</td>
+    <td>${convertToIndianDateFormat(data[i].dateOfInvoice)}</td>
+    <td>${data[i].total}</td>
+    <td><button id="${data[i].id}" class=" btn btn-outline-primary" onclick="edit(id,${d.getFullYear()},${d.getMonth()+1},${d.getDate()})">Edit</button></td>
+    <td><button class="btn btn-outline-secondary" id="${data[i].id}" onclick="view(id,${d.getFullYear()},${d.getMonth()+1},${d.getDate()})">View</button></td>
+  </tr>`;
+ 
+  document.getElementById('bodyList').insertAdjacentHTML("beforeend",html)
+    }
+    $("#invoiceList").DataTable();
+}
 async function fillPartyData(selectParty) {
   try {
     const partyres = await fetch("https://localhost:44357/api/Parties", {
@@ -109,7 +154,7 @@ function deleteProduct(id) {
   id = Number(id)
   console.log(typeof id)
 
-  fetch(`https://localhost:44357/api/invoices?partyId=${party_Id}&productId=${id}`, {
+  fetch(`https://localhost:44357/api/invoices?partyId=${party_Id}&productId=${id}&date=${year}-${month}-${day}`, {
     method: "DELETE",
     headers: headers
   }).then(req => fillInvoiceProducts(''))
@@ -122,14 +167,21 @@ function createInvoice() {
     var Product = Number(document.getElementById('selectProductInModel').value);
     var rateOfProduct = Number(document.getElementById('rateInModel').value);
     var quantity = Number(document.getElementById('quantityInModel').value);
-    var date = new Date();
+    if(month < 10){
+      month = `0${month}`
+    }
+    if(day<10){
+      day=`0${day}`
+    }
+    console.log(day.length)
+    var date = `${year}-${month}-${day}`;
   }
   else {
     var Party = Number(document.getElementById('selectParty').value);
     var Product = Number(document.getElementById('selectProduct').value);
     var rateOfProduct = Number(document.getElementById('rate').value);
     var quantity = Number(document.getElementById('quantity').value);
-    var date = new Date();
+    var date = document.getElementById('date').value;
   }
 
   fetch("https://localhost:44357/api/invoices", {
@@ -164,9 +216,13 @@ function closeModel() {
   location.reload();
 }
 
-async function edit(id) {
+async function edit(id,years,months,days) {
   console.log(id)
-  party_Id = id
+  party_Id = id;
+  year = years;
+  month=months;
+  day=days
+  console.log(year)
   document.getElementById('exampleModal').style.display = 'block';
 
   fillInvoiceProducts('');
@@ -189,8 +245,10 @@ async function fillInvoiceProducts(products) {
   let res
   var details = [];
   details.length = products.length;
+  var link = `https://localhost:44357/api/invoices/${party_Id}?date=${year}/${month}/${day}`
+  console.log(link)
   if (products == '') {
-    res = await fetch(`https://localhost:44357/api/invoices/${party_Id}`, {
+    res = await fetch(`https://localhost:44357/api/invoices/${party_Id}?date=${year}/${month}/${day}`, {
       method: 'GET', // or 'POST', 'PUT', etc.
       headers: headers,
     });
@@ -198,7 +256,7 @@ async function fillInvoiceProducts(products) {
   }
   else {
     for (let i = 0; i < products.length; i++) {
-      res = await fetch(`https://localhost:44357/api/Invoices/Search?partyId=${party_Id}&productName=${products[i]}`, {
+      res = await fetch(`https://localhost:44357/api/Invoices/Search?partyId=${party_Id}&productName=${products[i]}&date=${year}/${month}/${day}`, {
         method: 'GET', // or 'POST', 'PUT', etc.
         headers: headers,
       });
@@ -218,6 +276,7 @@ async function fillInvoiceProducts(products) {
 
   fillModelData(data);
 
+  
   // $('#InvoiceProduct').DataTable({searching: false});
 }
 
@@ -235,7 +294,7 @@ function fillModelData(data) {
    <td>  <input type="number" placeholder="Quantity" style="width: 60px; margin-left: 10px;" 
         id="quantity${data[i].id}" min="1" value="${data[i].quantity}" oninput="updateInvoiceProduct(id)"/></td>
    <td> <input type="text" id="date${data[i].id}" style="width: 8.5vw; margin-left: 10px;
-   border: none;" value="${data[i].dateOfInvoice}"></td>
+   border: none;" value="${convertToIndianDateFormat(data[i].dateOfInvoice)}"></td>
    <td>${data[i].total}</td>
    <!--<td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="updateInvoiceProduct(id)">Update</button></td>-->
    <td><button id="${data[i].id}" class="btn btn-outline-danger" onclick="deleteProduct(id)">Delete</button></td>
@@ -243,12 +302,19 @@ function fillModelData(data) {
 
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
   }
+ 
 }
 function updateInvoiceProduct(quantity) {
   var productId = quantity.slice(8, quantity.length);
   var rateOfProduct = Number(document.getElementById(`rate${productId}`).value);
   var quantity = Number(document.getElementById(`quantity${productId}`).value);
-  var date = document.getElementById(`date${productId}`).value;
+  if(month.toString().length < 2){
+    month = `0${month}`
+  }
+  if(day.toString().length<2){
+    day=`0${day}`
+  }
+  var date = `${year}-${month}-${day}`;
   party_Id = Number(party_Id);
   productId = Number(productId)
   console.log("quantity :- " + productId)
@@ -274,7 +340,7 @@ async function sortId() {
 
   var dataset = document.getElementById('sortId').getAttribute('dataSet');
 
-  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=Id`, {
+  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=Id&date=${year}/${month}/${day}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers: headers,
   });
@@ -289,7 +355,7 @@ async function sortProductName() {
  
   var dataset = document.getElementById('sortProductName').getAttribute('dataSet');
 
-  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=ProductName`, {
+  res = await fetch(`https://localhost:44357/api/Invoices/Sort?partyId=${party_Id}&toggle=${dataset}&sortField=ProductName&date=${year}/${month}/${day}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers: headers,
   });
@@ -299,8 +365,11 @@ async function sortProductName() {
   dataset=="0"? document.getElementById('sortProductName').setAttribute('dataSet', 1): document.getElementById('sortProductName').setAttribute('dataSet', 0);
   
 }
-function view(partyid) {
+function view(partyid,years,months,days) {
   localStorage.setItem("partyId", partyid);
+  localStorage.setItem("year", years);
+  localStorage.setItem("month", months);
+  localStorage.setItem("day", days);
   window.location.href = "/GenerateInvoice.html";
 }
 

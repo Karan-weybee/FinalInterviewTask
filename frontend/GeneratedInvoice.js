@@ -7,7 +7,7 @@ headers.append('Content-Type', 'application/json');
 document.getElementById('number').innerHTML=party_Id;
 
 async function getPartyName(){
-const res = await fetch(`https://localhost:44357/api/Parties/${party_Id}`, {
+const res = await fetch(`https://localhost:44357/api/Parties/${party_Id}?date=${localStorage.getItem("year")}/${localStorage.getItem("month")}/${localStorage.getItem("day")}`, {
     method: 'GET', // or 'POST', 'PUT', etc.
     headers:headers,
   });
@@ -19,7 +19,7 @@ getPartyName();
 
 async function InvoiceProducts(){
  var date;
-    const res = await fetch(`https://localhost:44357/api/invoices/${party_Id}`, {
+    const res = await fetch(`https://localhost:44357/api/invoices/${party_Id}?date=${localStorage.getItem("year")}/${localStorage.getItem("month")}/${localStorage.getItem("day")}`, {
         method: 'GET', // or 'POST', 'PUT', etc.
         headers:headers,
       });

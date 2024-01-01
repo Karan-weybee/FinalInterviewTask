@@ -35,7 +35,6 @@ namespace PartyProductCore.Controllers
         }
 
         // GET: api/Invoices
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<invoiceData>>> GetInvoices()
         {
@@ -43,7 +42,7 @@ namespace PartyProductCore.Controllers
 
             List<invoiceData> data = new List<invoiceData>();
 
-            using (SqlCommand command = new SqlCommand("SELECT Party_id as id,sum((Rate_Of_Product * Quantity)) as total,p.PartyName as partyName FROM(SELECT *,DENSE_RANK() OVER(ORDER BY Party_id) as rank FROM invoices) AS ranked_data inner join Parties p on p.id = ranked_data.Party_id group by rank, party_id, p.PartyName", _connection))
+            using (SqlCommand command = new SqlCommand("SELECT Party_id as Id,sum((Rate_Of_Product * Quantity)) as total,p.PartyName as PartyName,DateOfInvoice FROM(SELECT *,row_number() OVER(ORDER BY Party_id) as rank FROM invoices) AS ranked_data inner join Parties p on p.id = ranked_data.Party_id group by party_id, p.PartyName,ranked_data.DateOfInvoice", _connection))
             {
                 _connection.Open();
 
@@ -51,8 +50,7 @@ namespace PartyProductCore.Controllers
                 {
                     while (reader.Read())
                     {
-                        //data.Add(reader.GetString(0));
-                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2) });
+                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2), DateOfInvoice = reader.GetDateTime(3) });
                     }
                 }
                 _connection.Close();
@@ -62,16 +60,45 @@ namespace PartyProductCore.Controllers
             //return invoices;
         }
 
+        [HttpGet("Range")]
+        public ActionResult<IEnumerable<invoiceData>> GetInvoicesDateRange([FromQuery] DateTime StartDate, DateTime EndDate)
+        {
+            //var invoices = await _context.InvoiceData.FromSqlRaw("GetAllInvoices").ToListAsync();
+
+            List<invoiceData> data = new List<invoiceData>();
+
+            using (SqlCommand command = new SqlCommand("SELECT Party_id as Id,sum((Rate_Of_Product * Quantity)) as total,p.PartyName as PartyName,DateOfInvoice FROM(SELECT *,row_number() OVER(ORDER BY Party_id) as rank FROM invoices) AS ranked_data inner join Parties p on p.id = ranked_data.Party_id where ranked_data.DateOfInvoice between @StartDate and @EndDate group by party_id, p.PartyName,ranked_data.DateOfInvoice", _connection))
+            {
+                command.Parameters.AddWithValue("@StartDate", StartDate);
+                command.Parameters.AddWithValue("@EndDate", EndDate);
+                _connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2), DateOfInvoice = reader.GetDateTime(3) });
+                    }
+                }
+                _connection.Close();
+            }
+
+            return data;
+            //return invoices;
+        }
+
+        [EnableCors("AllowSpecificOrigin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<invoiceProducts>>> GetInvoices(int id)
+        public async Task<ActionResult<IEnumerable<invoiceProducts>>> GetInvoices(int id, [FromQuery] DateTime date)
         {
             //var invoices = await _context.invoiceProducts.FromSqlRaw("GetInvoicesForProduct @partyid", new SqlParameter("@partyid", id)).ToListAsync();
 
             List<invoiceProducts> data = new List<invoiceProducts>();
 
-            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and DateOfInvoice=@date group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
             {
                 command.Parameters.AddWithValue("@partyId", id);
+                command.Parameters.AddWithValue("@date", date);
                 _connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -90,15 +117,16 @@ namespace PartyProductCore.Controllers
         }
 
         [HttpGet("Search")]
-        public async Task<ActionResult> GetInvoices([FromQuery] int partyId, string productName)
+        public async Task<ActionResult> GetInvoices([FromQuery] int partyId, string productName, DateTime date)
         {
 
             List<invoiceProducts> data = new List<invoiceProducts>();
 
-            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and pr.ProductName in (@productName) group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and pr.ProductName in (@productName) and i.DateOfInvoice=@date group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
             {
                 command.Parameters.AddWithValue("@partyId", partyId);
                 command.Parameters.AddWithValue("@productName", productName);
+                command.Parameters.AddWithValue("@date", date);
                 _connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -117,15 +145,15 @@ namespace PartyProductCore.Controllers
         }
 
         [HttpGet("Sort")]
-        public async Task<ActionResult> GetInvoicesSortData([FromQuery] int partyId, string sortField, int toggle)
+        public async Task<ActionResult> GetInvoicesSortData([FromQuery] int partyId, string sortField, int toggle, DateTime date)
         {
 
             List<invoiceProducts> data = new List<invoiceProducts>();
 
-            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
+            using (SqlCommand command = new SqlCommand("select Product_id as id, Rate_Of_Product as RateOfProduct, quantity,sum((Rate_Of_Product * Quantity)) as total,pr.ProductName,i.DateOfInvoice from invoices i inner join Products pr on pr.id = i.Product_id where i.party_id = @partyId and i.DateOfInvoice=@date group by i.Product_id, pr.ProductName, Rate_Of_Product, quantity, i.DateOfInvoice", _connection))
             {
                 command.Parameters.AddWithValue("@partyId", partyId);
-                //command.Parameters.AddWithValue("@toggle", toggle);
+                command.Parameters.AddWithValue("@date", date);
                 _connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -198,32 +226,22 @@ namespace PartyProductCore.Controllers
         [HttpPost]
         public async Task<ActionResult<InvoiceDTO>> PostInvoices(InvoiceDTO invoicesDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                if (IsProductInInvoice(invoicesDTO.ProductId, invoicesDTO.PartyId))
-                {
-                    await EditProduct(invoicesDTO);
 
-                    return StatusCode(200, $"Product Edited");
-                }
-                else
-                {
-                    await _context.Database.ExecuteSqlRawAsync("EXEC InsertInvoice @Rate_Of_Product, @Quantity, @Party_id, @Product_id,@Date",
-                        new SqlParameter("@Rate_Of_Product", invoicesDTO.RateOfProduct),
-                        new SqlParameter("@Quantity", invoicesDTO.Quantity),
-                        new SqlParameter("@Party_id", invoicesDTO.PartyId),
-                        new SqlParameter("@Product_id", invoicesDTO.ProductId),
-                        new SqlParameter("@Date", DateTime.Today.Date));
-                    return StatusCode(201, $"invoice Created Successfully");
-                }
-            }
-            catch (Exception ex)
+            if (IsProductInInvoice(invoicesDTO.ProductId, invoicesDTO.PartyId, invoicesDTO.DateOfInvoice))
             {
-                return BadRequest(ex.Message);
+                await EditProduct(invoicesDTO);
+
+                return StatusCode(200, $"Product Edited");
+            }
+            else
+            {
+                await _context.Database.ExecuteSqlRawAsync("EXEC InsertInvoice @Rate_Of_Product, @Quantity, @Party_id, @Product_id,@Date",
+                    new SqlParameter("@Rate_Of_Product", invoicesDTO.RateOfProduct),
+                    new SqlParameter("@Quantity", invoicesDTO.Quantity),
+                    new SqlParameter("@Party_id", invoicesDTO.PartyId),
+                    new SqlParameter("@Product_id", invoicesDTO.ProductId),
+                    new SqlParameter("@Date", DateTime.Today.Date));
+                return StatusCode(201, $"invoice Created Successfully");
             }
 
         }
@@ -239,7 +257,7 @@ namespace PartyProductCore.Controllers
                  new SqlParameter("@Rate_Of_Product", invoiceProduct.RateOfProduct),
                  new SqlParameter("@Quantity", invoiceProduct.Quantity),
                  new SqlParameter("@Product_id", invoiceProduct.Id),
-                 new SqlParameter("@Date", DateTime.Today.Date));
+                 new SqlParameter("@Date", invoiceProduct.DateOfInvoice));
 
 
 
@@ -248,11 +266,12 @@ namespace PartyProductCore.Controllers
 
         // DELETE: api/Invoices
         [HttpDelete]
-        public async Task<ActionResult<Invoices>> DeleteInvoices([FromQuery] int partyId, int productId)
+        public async Task<ActionResult<Invoices>> DeleteInvoices([FromQuery] int partyId, int productId, DateTime date)
         {
-            await _context.Database.ExecuteSqlRawAsync($"DeleteInvoice @partyId,@productId",
+            await _context.Database.ExecuteSqlRawAsync($"DeleteInvoice @partyId,@productId,@dateOfInvoice",
                  new SqlParameter("@partyid", partyId),
-                  new SqlParameter("@productId", productId)
+                  new SqlParameter("@productId", productId),
+                  new SqlParameter("@dateOfInvoice", date)
                 );
 
             return StatusCode(202, $"invoice Deleted Successfully");
@@ -262,9 +281,11 @@ namespace PartyProductCore.Controllers
         {
             return _context.Invoices.Any(e => e.Id == id);
         }
-        private bool IsProductInInvoice(int productId, int partyId)
+        private bool IsProductInInvoice(int productId, int partyId, DateTime date)
         {
-            return _context.Invoices.Any(e => e.ProductId == productId && e.PartyId == partyId);
+            string d = date.Year + "/" + date.Month + "/" + date.Day;
+            bool b = _context.Invoices.Any(e => e.ProductId == productId && e.PartyId == partyId && e.DateOfInvoice == date.Date);
+            return b;
         }
         private bool ProductNameExists(string productName)
         {
@@ -279,7 +300,7 @@ namespace PartyProductCore.Controllers
                        new SqlParameter("@Party_id", invoicesDTO.PartyId),
                        new SqlParameter("@Product_id", invoicesDTO.ProductId),
 
-                       new SqlParameter("@Date", DateTime.Today.Date));
+                       new SqlParameter("@Date", invoicesDTO.DateOfInvoice));
             return Ok("Edit");
         }
     }

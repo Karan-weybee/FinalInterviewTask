@@ -152,27 +152,52 @@
         <div class="col-auto" style="margin-left: -15px;">
           <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantity" min="1" />
         </div>
+        <div class="col-auto">
+          <b><label class="col-form-label setFont">Date</label></b>
+      </div>
+      <div class="col-auto" style="margin-left: -15px;">
+          <input type="date" placeholder="Date" style=" margin-left: 10px;" id="date" />
+      </div>
         <div class="col-auto" style="margin-left: -5px;">
           <button class="btn btn-outline-success" onclick="createInvoice()">Create</button>
         </div>
       </div>
     </div>
 
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <b><label class="col-form-label setFont">Start Date</label></b>
+    </div>
+    <div class="col-auto" style="margin-left: -15px;">
+        <input type="date" placeholder="Date" style=" margin-left: 10px;" id="StartDate" />
+    </div>
+    <div class="col-auto">
+      <b><label class="col-form-label setFont">End Date</label></b>
+  </div>
+  <div class="col-auto" style="margin-left: -15px;">
+      <input type="date" placeholder="Date" style=" margin-left: 10px;" id="EndDate" />
+  </div>
+  <div class="col-auto" style="margin-left: -5px;">
+    <button class="btn btn-outline-success" onclick="RangeInvoice()">Range</button>
+  </div>
+    </div>
+    
     <div class="conform"><span class="message" id="invoice">New Invoice Created Successfully</span></div><br>
     <div class="AssignList">
-      <table class="table" id="bodyList">
+      <table class="table" id="invoiceList">
         <thead class="table-light">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Party Name</th>
+            <th scope="col">Date</th>
             <th scope="col">Total</th>
             <th scope="col">Edit</th>
             <th scope="col">Details</th>
           </tr>
         </thead>
-        <!-- <tbody>
+        <tbody id="bodyList">
         
-        </tbody> -->
+        </tbody>
       </table>
     </div>
 
@@ -339,46 +364,47 @@
   <script type="text/javascript" src="Invoice.js"></script>
   <script defer type="text/javascript" src="Dropdown.js"></script>
   <script>
-    $(document).ready(function () {
+    // $(document).ready(function () {
 
-      var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", "https://localhost:44357/api/invoices", true);
-      xmlhttp.onreadystatechange = function () {
+    //   var xmlhttp = new XMLHttpRequest();
+    //   xmlhttp.open("GET", "https://localhost:44357/api/invoices", true);
+    //   xmlhttp.onreadystatechange = function () {
 
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          var persons = JSON.parse(xmlhttp.responseText);
-          $("#bodyList").DataTable({
-            data: persons,
+    //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    //       var persons = JSON.parse(xmlhttp.responseText);
+    //       $("#bodyList").DataTable({
+    //         data: persons,
 
-            "columns": [
-              { "data": "id" },
-              { "data": "partyName" },
-              { "data": "total" },
-              {
-                "title": "Edit",
-                render: function (data, type, full) {
-                  return `<td>
-                <button id="${full.id}" class=" btn btn-outline-primary" onclick="edit(this.id)">Edit</button>
-            </td>`}
-              },
-              {
-                "title": "Details",
-                render: function (data, type, full) {
-                  return `
-            <td><button class="btn btn-outline-secondary" id="${full.id}" onclick="view(this.id)">View</button>
-                </td>`}
-              }
-            ],
+    //         "columns": [
+    //           { "data": "Id" },
+    //           { "data": "PartyName" },
+    //           { "data": "DateOfInvoice"},
+    //           { "data": "total" },
+    //           {
+    //             "title": "Edit",
+    //             render: function (data, type, full) {
+    //               return `<td>
+    //             <button id="${full.id}" class=" btn btn-outline-primary" onclick="edit(this.id)">Edit</button>
+    //         </td>`}
+    //           },
+    //           {
+    //             "title": "Details",
+    //             render: function (data, type, full) {
+    //               return `
+    //         <td><button class="btn btn-outline-secondary" id="${full.id}" onclick="view(this.id)">View</button>
+    //             </td>`}
+    //           }
+    //         ],
 
-          });
-        }
-        if (xmlhttp.status == 401) {
-          window.location.href = "/Register.html"
-        }
+    //       });
+    //     }
+    //     if (xmlhttp.status == 401) {
+    //       window.location.href = "/Register.html"
+    //     }
 
-      }
-      xmlhttp.send();
-    })
+    //   }
+    //   xmlhttp.send();
+    // })
 
   </script>
 </body>

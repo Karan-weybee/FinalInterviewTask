@@ -18,7 +18,7 @@ function convertToIndianDateFormat(inputDate) {
   const year = dateObject.getFullYear();
 
   // Create the Indian date format string
-  const indianDateFormat = `${day}/${month}/${year}`;
+  const indianDateFormat = `${year}/${month}/${day}`;
 
   return indianDateFormat;
 }
