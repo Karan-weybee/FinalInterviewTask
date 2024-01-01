@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+   
   <link rel="stylesheet" type="text/css" href="style.css">
   <script defer type="text/javascript" src="Assignscript.js"></script>
   <script defer type="text/javascript" src="script.js"></script>
@@ -24,15 +26,14 @@
 
 <body>
   <div class="container">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.html">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 3em;">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="index.html">Party</a>
             </li>
@@ -40,21 +41,20 @@
               <a class="nav-link" href="Product.html">Product</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link Active" href="#">Assign Party</a>
+              <a class="nav-link" href="AssignParty.html">Assign Party</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="ProductRate.html">Product Rate</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="Invoice.html">Invoice</a>
+              <a class="nav-link Active" href="Invoice.html">Invoice</a>
             </li>
-
           </ul>
+          <span class="d-flex" id="logout">
+            <!-- <a class="nav-link  btn-outline-success" href="#" id="logout">Logout</a> -->
+            <button class="btn btn-outline-danger" onclick="Logout()">Logout</button>
+          </span>
         </div>
-        <span class="d-flex" id="logout">
-          <!-- <a class="nav-link  btn-outline-success" href="#" id="logout">Logout</a> -->
-          <button class="btn btn-outline-danger" onclick="Logout()">Logout</button>
-        </span>
       </div>
     </nav>
 
@@ -169,9 +169,6 @@
     </script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
 
 

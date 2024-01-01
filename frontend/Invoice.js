@@ -253,6 +253,8 @@ async function fillInvoiceProducts(products) {
       headers: headers,
     });
     data = await res.json();
+    fillModelData(data);
+
   }
   else {
     for (let i = 0; i < products.length; i++) {
@@ -274,8 +276,7 @@ async function fillInvoiceProducts(products) {
   console.log("----------------")
   console.log(data)
 
-  fillModelData(data);
-
+ 
   
   // $('#InvoiceProduct').DataTable({searching: false});
 }
@@ -286,6 +287,7 @@ function fillModelData(data) {
 
   document.getElementById('ProductList').innerHTML = ''
   for (let i = 0; i < index; i++) {
+    if(data[i]){
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
@@ -299,8 +301,9 @@ function fillModelData(data) {
    <!--<td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="updateInvoiceProduct(id)">Update</button></td>-->
    <td><button id="${data[i].id}" class="btn btn-outline-danger" onclick="deleteProduct(id)">Delete</button></td>
  </tr>`;
-
+    
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
+    }
   }
  
 }

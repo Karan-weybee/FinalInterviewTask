@@ -95,3 +95,15 @@ font-size: 20px;
 .btnConfirn{
     margin-right: 13px;
 }
+.navbar-expand-lg .navbar-collapse {
+    justify-content: space-between;
+}
+.navbar{
+    background-color: #e3f2fd !important;
+}
+ul li a{
+    font-size: 17px;
+}
+.container-fluid > a{
+    font-weight: 600;
+}
