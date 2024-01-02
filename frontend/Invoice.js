@@ -41,10 +41,12 @@ async function RangeInvoice(){
 
 function loadInvoiceList(data){
   document.getElementById('bodyList').innerHTML='';
+  var count=1;
   for(let i=0;i<data.length;i++){
     var d = new Date(data[i].dateOfInvoice);
     var html = `<tr>
-    <td>${data[i].id}</td>
+    <th>${count++}</th>
+    <td style="display: none;">${data[i].id}</td>
     <td>${data[i].partyName}</td>
     <td>${convertToIndianDateFormat(data[i].dateOfInvoice)}</td>
     <td>${data[i].total}</td>
@@ -286,7 +288,15 @@ async function fillInvoiceProducts(products) {
 function fillModelData(data) {
   var size=Number(document.getElementById('Size').value);
   var index= data.length>size?size:data.length;
-  
+  var updatedSize=[];
+  for(let i=0;i<data.length;i++){
+      if(data[i]){
+        updatedSize.push(data[i]);
+      }
+  }
+
+  data=updatedSize;
+  console.log(data)
   document.getElementById('ProductList').innerHTML = ''
   for (let i = 0; i < index; i++) {
     if(data[i]){
@@ -307,9 +317,7 @@ function fillModelData(data) {
     
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
     }
-   
   }
- 
 }
 function updateInvoiceProduct(quantity) {
   var productId = quantity.slice(8, quantity.length);

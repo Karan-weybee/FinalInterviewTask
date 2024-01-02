@@ -79,10 +79,6 @@
     #pagination {
       float: right;
     }
-
-    #bodyList tr:first-child {
-      display: none;
-    }
   </style>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
   <script defer type="text/javascript" src="script.js"></script>
@@ -195,6 +191,7 @@
         <thead class="table-light">
           <tr>
             <th scope="col">#</th>
+            <th scope="col" style="display: none;">Party Id</th>
             <th scope="col">Party Name</th>
             <th scope="col">Date</th>
             <th scope="col">Total</th>
@@ -290,19 +287,9 @@
               </span>
 
               <script>
-                function selecteProducts() {
-                  const select = document.getElementById('field2');
-                  const selectedOptions = [];
-
-                  for (const option of select.options) {
-                    if (option.selected) {
-                      selectedOptions.push(option.value);
-                    }
-                  }
-                  // console.log(selectedOptions)
-                  searchProduct(selectedOptions);
-                }
-                var data;
+                
+                function fillSearchProduct(){
+                  var data;
                 const headerss = new Headers();
                 headerss.append('Authorization', `Bearer ${localStorage.getItem('tokenName')}`);
                 headerss.append('Content-Type', 'application/json');
@@ -317,6 +304,21 @@
                     document.getElementById('field2').insertAdjacentHTML("beforeend", html);
                   }
                 });
+                }
+                fillSearchProduct();
+
+                function selecteProducts() {
+                  const select = document.getElementById('field2');
+                  const selectedOptions = [];
+
+                  for (const option of select.options) {
+                    if (option.selected) {
+                      selectedOptions.push(option.value);
+                    }
+                  }
+                  // console.log(selectedOptions)
+                  searchProduct(selectedOptions);
+                }
 
               </script>
               <!-- multi select  -->

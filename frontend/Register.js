@@ -34,7 +34,7 @@ async function RegisterUser(userEmail,password){
     })
         .then((response) => {
             if(response.status==400){
-                alert("User is already available. Please Login");
+                sessionStorage.setItem("IsUserAvailable",'yes')
                 window.location.href = "/Register.html"
             }
             return response.json();

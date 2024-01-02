@@ -36,7 +36,3 @@ function toggleModal(id) {
 
   document.getElementById('conformation').insertAdjacentHTML('beforeend',html);
 }
-
-
-// trigger.addEventListener("click", toggleModal);
-// closeButton.addEventListener("click",()=>{ toggleModal(false)});
