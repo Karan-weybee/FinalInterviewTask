@@ -241,7 +241,7 @@ namespace PartyProductCore.Controllers
                     new SqlParameter("@Quantity", invoicesDTO.Quantity),
                     new SqlParameter("@Party_id", invoicesDTO.PartyId),
                     new SqlParameter("@Product_id", invoicesDTO.ProductId),
-                    new SqlParameter("@Date", DateTime.Today.Date));
+                    new SqlParameter("@Date", invoicesDTO.DateOfInvoice));
                 return StatusCode(201, $"invoice Created Successfully");
             }
 
@@ -252,15 +252,12 @@ namespace PartyProductCore.Controllers
         public async Task<ActionResult<invoiceProducts>> PutInvoices(int id, invoiceProducts invoiceProduct)
         {
 
-
             await _context.Database.ExecuteSqlRawAsync("EXEC UpdateInvoice @partyid,@Rate_Of_Product, @Quantity,@Product_id,@Date",
                  new SqlParameter("@partyid", id),
                  new SqlParameter("@Rate_Of_Product", invoiceProduct.RateOfProduct),
                  new SqlParameter("@Quantity", invoiceProduct.Quantity),
                  new SqlParameter("@Product_id", invoiceProduct.Id),
                  new SqlParameter("@Date", invoiceProduct.DateOfInvoice));
-
-
 
             return StatusCode(201, $"invoice updated Successfully");
         }

@@ -167,16 +167,17 @@ function createInvoice() {
     var Product = Number(document.getElementById('selectProductInModel').value);
     var rateOfProduct = Number(document.getElementById('rateInModel').value);
     var quantity = Number(document.getElementById('quantityInModel').value);
-    if(month < 10){
+    if(month.toString().length < 2){
       month = `0${month}`
     }
-    if(day<10){
+    if(day.toString().length<2){
       day=`0${day}`
     }
-    console.log(day.length)
+   
     var date = `${year}-${month}-${day}`;
   }
   else {
+    console.log("hii")
     var Party = Number(document.getElementById('selectParty').value);
     var Product = Number(document.getElementById('selectProduct').value);
     var rateOfProduct = Number(document.getElementById('rate').value);
@@ -240,7 +241,10 @@ async function edit(id,years,months,days) {
   var html1 = ` <option value="${Partydata.id}">${Partydata.partyName}</option>`;
   document.getElementById('selectPartyInModel').insertAdjacentHTML("beforeend", html1)
 
+ 
 }
+
+
 async function fillInvoiceProducts(products) {
   let res
   var details = [];
@@ -272,9 +276,7 @@ async function fillInvoiceProducts(products) {
     console.log(data)
     fillModelData(data);
   }
-  
-  console.log("----------------")
-  console.log(data)
+ 
 
  
   
@@ -283,11 +285,12 @@ async function fillInvoiceProducts(products) {
 
 function fillModelData(data) {
   var size=Number(document.getElementById('Size').value);
-  var index= data.length>size?size:data.length;;
-
+  var index= data.length>size?size:data.length;
+  
   document.getElementById('ProductList').innerHTML = ''
   for (let i = 0; i < index; i++) {
     if(data[i]){
+    
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
    <td>${data[i].productName}</td>
@@ -304,6 +307,7 @@ function fillModelData(data) {
     
     document.getElementById('ProductList').insertAdjacentHTML("beforeend", html)
     }
+   
   }
  
 }
