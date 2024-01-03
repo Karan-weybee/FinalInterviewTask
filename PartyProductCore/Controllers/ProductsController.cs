@@ -69,10 +69,6 @@ namespace PartyProductCore.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (ProductNameExists(productDTO.ProductName))
-            {
-                return BadRequest("Modify ProductName Already Exixts...");
-            }
 
             _context.Entry(_mapper.Map<Products>(productDTO)).State = EntityState.Modified;
 

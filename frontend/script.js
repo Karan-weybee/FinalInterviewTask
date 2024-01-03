@@ -18,7 +18,7 @@ function convertToIndianDateFormat(inputDate) {
   const year = dateObject.getFullYear();
 
   // Create the Indian date format string
-  const indianDateFormat = `${year}/${month}/${day}`;
+  const indianDateFormat = `${month}/${day}/${year}`;
 
   return indianDateFormat;
 }
@@ -29,7 +29,7 @@ var modal = document.querySelector(".modalPopup");
 
 function toggleModal(id) {
   console.log('delete pop up')
-  modal.classList.toggle("show-modalPopup");
+  document.querySelector(".modalPopup").classList.toggle("show-modalPopup");
   document.getElementById('conformation').innerHTML='';
   var html = ` <button class="btnConfirn btn btn-outline-danger" onclick="deleteConfirm(${id})">Delete</button>
   <button class="btn btn-outline-secondary" onclick="deleteConfirm(false)">Cancel</button>`

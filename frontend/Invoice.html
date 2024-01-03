@@ -156,12 +156,12 @@
         <div class="col-auto" style="margin-left: -15px;">
           <input type="number" placeholder="Quantity" style=" margin-left: 10px;" id="quantity" min="1" />
         </div>
-        <div class="col-auto">
+        <!-- <div class="col-auto">
           <b><label class="col-form-label setFont">Date</label></b>
         </div>
         <div class="col-auto" style="margin-left: -15px;">
           <input type="date" placeholder="Date" style=" margin-left: 10px;" id="date" />
-        </div>
+        </div> -->
         <div class="col-auto" style="margin-left: -5px;">
           <button class="btn btn-outline-success" onclick="createInvoice()">Create</button>
         </div>
@@ -169,6 +169,23 @@
     </div>
     <div class="conform"><span class="message" id="invoice">New Invoice Created Successfully</span></div><br>
     <div class="row g-3 align-items-center">
+      <!-- <div class="col-auto">
+        <b><label class="col-form-label setFont">Party</label></b>
+      </div>
+      <div class="col-auto" style="margin-left: -25px;">
+        <select class="form-select" aria-label="Default select example" id="selectPartySearch"
+        onchange="fillProductData(id,'field3')" style=" height: 34px; margin-left: 20px; width:11.7em">
+        <option selected>Select Party</option>
+      </select>
+      </div>
+      <div class="col-auto">
+        <b><label class="col-form-label setFont">Product</label></b>
+      </div>
+      <div class="col-auto" style="margin-left: -25px;">
+        <select style="width: 30em;" name="field3" id="field3" multiple multiselect-search="true"
+        multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
+      </select>
+      </div> -->
       <div class="col-auto">
         <b><label class="col-form-label setFont">Start Date</label></b>
       </div>
@@ -184,6 +201,7 @@
       <div class="col-auto" style="margin-left: -5px;">
         <button class="btn btn-outline-success" onclick="RangeInvoice()">Search In Range</button>
       </div>
+      <button class="btn btn-outline-secondary" onclick="Clear()">Clear</button>
     </div>
     <br>
     <div class="AssignList">
@@ -310,7 +328,6 @@
                 function selecteProducts() {
                   const select = document.getElementById('field2');
                   const selectedOptions = [];
-
                   for (const option of select.options) {
                     if (option.selected) {
                       selectedOptions.push(option.value);

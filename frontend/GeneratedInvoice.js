@@ -13,13 +13,14 @@ const res = await fetch(`https://localhost:44357/api/Parties/${party_Id}?date=${
   });
     data = await res.json();
    console.log(data)
-   document.getElementById('partyName').innerHTML=data.partyName;
+   document.getElementById('partyName').innerHTML=`<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava${party_Id%6==0?1:party_Id%6}-bg.webp"
+   alt="avatar 1" style="width: 45px; height: auto; margin-right:10px">${data.partyName}`;
    }
 getPartyName();
 
 async function InvoiceProducts(){
  var date;
-    const res = await fetch(`https://localhost:44357/api/invoices/${party_Id}?date=${localStorage.getItem("year")}/${localStorage.getItem("month")}/${localStorage.getItem("day")}`, {
+    const res = await fetch(`https://localhost:44357/api/invoices/${party_Id}?date=${localStorage.getItem("year")}-${localStorage.getItem("month")}-${localStorage.getItem("day")}`, {
         method: 'GET', // or 'POST', 'PUT', etc.
         headers:headers,
       });
@@ -51,8 +52,9 @@ async function InvoiceProducts(){
        console.log(data)
     
        for(let i=0;i<data.length;i++){
-    if(data[i].id==party_Id){
-        document.getElementById('total').innerHTML=data[i].total
+    if(data[i].id==party_Id && convertToIndianDateFormat(data[i].dateOfInvoice) == `${localStorage.getItem("year")}/${localStorage.getItem("month")}/${localStorage.getItem("day")}`){
+      console.log(convertToIndianDateFormat(data[i].dateOfInvoice)) 
+      document.getElementById('total').innerHTML=data[i].total
     }
     
        }
@@ -65,9 +67,12 @@ InvoiceTotal();
 
 document.getElementById('download').addEventListener('click',
 function(){
-  const element = document.querySelector('.main'); // Choose the parent element that wraps your invoice content
+  const element = document.querySelector('#InvoiceGeneration'); // Choose the parent element that wraps your invoice content
   html2pdf(element);
 }
+// function(){
+//   window.print();
+// }
 );
 document.getElementById('back').addEventListener('click',
 function(){

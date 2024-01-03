@@ -80,10 +80,6 @@ namespace PartyProductCore.Controllers
                 return BadRequest();
             }
             assignPartyDTO.Id = id;
-            if (AssignExists(assignPartyDTO.PartyId, assignPartyDTO.ProductId))
-            {
-                return BadRequest("Assign Is already Exists");
-            }
             try
             {
                 _context.Entry(_mapper.Map<AssignParties>(assignPartyDTO)).State = EntityState.Modified;

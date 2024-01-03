@@ -19,22 +19,24 @@ async function loadPartyDate() {
   console.log(data)
 
   for (let i = 0; i < data.length; i++) {
+    let img= data[i].id;
     var html = `<tr>
    <th scope="row">${data[i].id}</th>
-   <td>${data[i].partyName}</td>
+   <td><!--<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava${img%6==0?1:img%6}-bg.webp"
+   alt="avatar 1" style="width: 45px; height: auto; margin-right:15px">-->${data[i].partyName}</td>
    <td><button id="${data[i].id}" class="btn btn-outline-primary" onclick="edit(id)">Edit</button></td>
    <td><button id="/${data[i].id}" class="btn btn-outline-danger" onclick="deleteParty(id)">Delete</button></td>
  </tr>`;
 
     document.getElementById('bodyList').insertAdjacentHTML("beforeend", html)
   }
-  document.getElementById('#partyTable').DataTable();
+  // document.getElementById('#partyTable').DataTable();
 }
 
 loadPartyDate();
 
 function deleteConfirm(isDelete){
-  modal.classList.toggle("show-modalPopup");
+  document.querySelector(".modalPopup").classList.toggle("show-modalPopup");
 
   if(isDelete != 'flase'){
   console.log(isDelete)
@@ -95,6 +97,7 @@ async function edit(id) {
 function editFromModel() {
   console.log("party id " + PartyId)
   var name = document.getElementById('partyNameEdit').value;
+
   fetch(`https://localhost:44357/api/Parties/${PartyId}`, {
     method: "PUT",
     body: JSON.stringify({

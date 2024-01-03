@@ -81,7 +81,7 @@ style.innerHTML = `
   background-color: #ced4da;
 }
 .multiselect-dropdown span.maxselected {width:100%;}
-.multiselect-dropdown-all-selector {border-bottom:solid 1px #999;display:none}
+.multiselect-dropdown-all-selector {border-bottom:solid 1px #999;}
 `;
 document.head.appendChild(style);
 
@@ -91,7 +91,7 @@ function MultiselectDropdown(options){
     height:'15rem',
     placeholder:'Select Products',
     txtSelected:'Selected',
-    // txtAll:'',
+    txtAll:'All',
     txtRemove: 'Remove',
     txtSearch:'Search',
     ...options

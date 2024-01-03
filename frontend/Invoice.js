@@ -19,6 +19,8 @@ async function loadInvoiceData() {
 
    loadInvoiceList(data);
   fillPartyData('selectParty');
+  fillPartyData('selectPartySearch');
+  
 }
 
 loadInvoiceData();
@@ -41,20 +43,22 @@ async function RangeInvoice(){
 
 function loadInvoiceList(data){
   document.getElementById('bodyList').innerHTML='';
-  var count=1;
   for(let i=0;i<data.length;i++){
+    let img=data[i].id;
     var d = new Date(data[i].dateOfInvoice);
     var html = `<tr>
-    <th>${count++}</th>
+    <th>${data[i].partyId}</th>
     <td style="display: none;">${data[i].id}</td>
-    <td>${data[i].partyName}</td>
+    <td><img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava${img%6==0?1:img%6}-bg.webp"
+    alt="avatar 1" style="width: 45px; height: auto; margin-right:15px"> 
+    ${data[i].partyName}</td>
     <td>${convertToIndianDateFormat(data[i].dateOfInvoice)}</td>
     <td>${data[i].total}</td>
     <td><button id="${data[i].id}" class=" btn btn-outline-primary" onclick="edit(id,${d.getFullYear()},${d.getMonth()+1},${d.getDate()})">Edit</button></td>
     <td><button class="btn btn-outline-secondary" id="${data[i].id}" onclick="view(id,${d.getFullYear()},${d.getMonth()+1},${d.getDate()})">View</button></td>
   </tr>`;
  
-  document.getElementById('bodyList').insertAdjacentHTML("beforeend",html)
+ document.getElementById('bodyList').insertAdjacentHTML("beforeend",html)
     }
     $("#invoiceList").DataTable();
 }
@@ -184,7 +188,7 @@ function createInvoice() {
     var Product = Number(document.getElementById('selectProduct').value);
     var rateOfProduct = Number(document.getElementById('rate').value);
     var quantity = Number(document.getElementById('quantity').value);
-    var date = document.getElementById('date').value;
+    var date = new Date();
   }
 
   fetch("https://localhost:44357/api/invoices", {
@@ -422,4 +426,7 @@ async function prevPage(){
 }
 function changeSize(){
   selecteProducts();
+}
+function Clear(){
+  location.reload();
 }

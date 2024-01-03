@@ -70,10 +70,6 @@ namespace PartyProductCore.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (PartiesNameExists(partyDTO.PartyName))
-            {
-                return BadRequest("Modifyed Party already Exist");
-            }
 
             _context.Entry(_mapper.Map<Parties>(partyDTO)).State = EntityState.Modified;
 

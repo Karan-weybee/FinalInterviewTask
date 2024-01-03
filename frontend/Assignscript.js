@@ -111,7 +111,7 @@ async function fillProductData(selectProduct){
 }
 
 function deleteConfirm(isDelete){
-  modal.classList.toggle("show-modalPopup");
+  document.querySelector(".modalPopup").classList.toggle("show-modalPopup");
 
   if(isDelete != 'flase'){
   console.log(isDelete)

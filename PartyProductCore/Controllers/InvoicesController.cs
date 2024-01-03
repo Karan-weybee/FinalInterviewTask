@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PartyProductCore.Entities;
 using PartyProductCore.Models;
@@ -22,16 +23,19 @@ namespace PartyProductCore.Controllers
     [Authorize]
     public class InvoicesController : ControllerBase
     {
-        private SqlConnection _connection = new SqlConnection("Server=DESKTOP-9IJS7NM;Database=PartyProductCore;Trusted_Connection=True;");
+        private SqlConnection _connection;
+        private string _connectionstring;
         private readonly PartyProductCoreContext _context;
         private readonly IMapper _mapper;
         private ILogger<InvoicesController> _logger;
 
-        public InvoicesController(PartyProductCoreContext context, IMapper mapper, ILogger<InvoicesController> logger)
+        public InvoicesController(PartyProductCoreContext context, IMapper mapper, ILogger<InvoicesController> logger, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _connectionstring = configuration.GetConnectionString("defaultconnection");
+            _connection = new SqlConnection(_connectionstring);
         }
 
         // GET: api/Invoices
@@ -42,7 +46,7 @@ namespace PartyProductCore.Controllers
 
             List<invoiceData> data = new List<invoiceData>();
 
-            using (SqlCommand command = new SqlCommand("SELECT Party_id as Id,sum((Rate_Of_Product * Quantity)) as total,p.PartyName as PartyName,DateOfInvoice FROM(SELECT *,row_number() OVER(ORDER BY Party_id) as rank FROM invoices) AS ranked_data inner join Parties p on p.id = ranked_data.Party_id group by party_id, p.PartyName,ranked_data.DateOfInvoice", _connection))
+            using (SqlCommand command = new SqlCommand("GetAllInvoices", _connection))
             {
                 _connection.Open();
 
@@ -50,7 +54,7 @@ namespace PartyProductCore.Controllers
                 {
                     while (reader.Read())
                     {
-                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2), DateOfInvoice = reader.GetDateTime(3) });
+                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(3), PartyName = reader.GetString(1), DateOfInvoice = reader.GetDateTime(2), PartyId = reader.GetInt64(4) });
                     }
                 }
                 _connection.Close();
@@ -67,7 +71,7 @@ namespace PartyProductCore.Controllers
 
             List<invoiceData> data = new List<invoiceData>();
 
-            using (SqlCommand command = new SqlCommand("SELECT Party_id as Id,sum((Rate_Of_Product * Quantity)) as total,p.PartyName as PartyName,DateOfInvoice FROM(SELECT *,row_number() OVER(ORDER BY Party_id) as rank FROM invoices) AS ranked_data inner join Parties p on p.id = ranked_data.Party_id where ranked_data.DateOfInvoice between @StartDate and @EndDate group by party_id, p.PartyName,ranked_data.DateOfInvoice", _connection))
+            using (SqlCommand command = new SqlCommand("SELECT Party_id,p.PartyName,i.DateOfInvoice,sum(i.Rate_Of_Product*i.quantity) as total,row_number() OVER(order by DateOfInvoice ) as rank FROM invoices i inner join Parties p on p.id = Party_id where  DateOfInvoice between @StartDate and @EndDate group by Party_id,p.PartyName,i.DateOfInvoice", _connection))
             {
                 command.Parameters.AddWithValue("@StartDate", StartDate);
                 command.Parameters.AddWithValue("@EndDate", EndDate);
@@ -77,7 +81,7 @@ namespace PartyProductCore.Controllers
                 {
                     while (reader.Read())
                     {
-                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(1), PartyName = reader.GetString(2), DateOfInvoice = reader.GetDateTime(3) });
+                        data.Add(new invoiceData { Id = reader.GetInt32(0), Total = reader.GetDecimal(3), PartyName = reader.GetString(1), DateOfInvoice = reader.GetDateTime(2), PartyId = reader.GetInt64(4) });
                     }
                 }
                 _connection.Close();

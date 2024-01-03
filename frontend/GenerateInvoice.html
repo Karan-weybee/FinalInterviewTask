@@ -308,7 +308,8 @@
 		@page {
 			margin: 0;
 		}
-		.print-btn{
+
+		.print-btn {
 			display: flex;
 			justify-content: center;
 			gap: 30px;
@@ -317,10 +318,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
 	<script defer type="text/javascript" src="GeneratedInvoice.js"></script>
 	<script defer type="text/javascript" src="script.js"></script>
+	
 </head>
 
 <body>
-	<div class="main">
+	<div class="main" id="InvoiceGeneration">
+
 		<header>
 			<h1>Invoice</h1>
 			<!-- <address  >
@@ -332,6 +335,7 @@
 		</header>
 		<article>
 			<address>
+				
 				<p id="partyName">Some Company<br></p>
 			</address>
 			<table class="meta">
@@ -381,9 +385,9 @@
 		</aside>
 	</div>
 	<div class="print-btn">
-	<button type="button" class="btn btn-info" id="download">Download</button>
-	<button type="button" class="btn btn-primary" id="back">Back</button>
-</div>
+		<button type="button" class="btn btn-info" id="download">Download</button>
+		<button type="button" class="btn btn-primary" id="back">Back</button>
+	</div>
 </body>
 
 </html>
