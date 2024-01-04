@@ -169,23 +169,25 @@
     </div>
     <div class="conform"><span class="message" id="invoice">New Invoice Created Successfully</span></div><br>
     <div class="row g-3 align-items-center">
-      <!-- <div class="col-auto">
+      <div class="col-auto">
         <b><label class="col-form-label setFont">Party</label></b>
       </div>
       <div class="col-auto" style="margin-left: -25px;">
         <select class="form-select" aria-label="Default select example" id="selectPartySearch"
-        onchange="fillProductData(id,'field3')" style=" height: 34px; margin-left: 20px; width:11.7em">
-        <option selected>Select Party</option>
-      </select>
+          onchange="fillProductData(id,'field3')" style=" height: 34px; margin-left: 20px; width:11.7em">
+          <option selected>Select Party</option>
+        </select>
       </div>
       <div class="col-auto">
         <b><label class="col-form-label setFont">Product</label></b>
       </div>
       <div class="col-auto" style="margin-left: -25px;">
         <select style="width: 30em;" name="field3" id="field3" multiple multiselect-search="true"
-        multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
-      </select>
-      </div> -->
+          multiselect-select-all="true" multiselect-max-items="1" onchange="selecteProducts()">
+        </select>
+      </div>
+    </div><br>
+    <div class="row g-3 align-items-center">
       <div class="col-auto">
         <b><label class="col-form-label setFont">Start Date</label></b>
       </div>
@@ -305,23 +307,23 @@
               </span>
 
               <script>
-                
-                function fillSearchProduct(){
+
+                function fillSearchProduct() {
                   var data;
-                const headerss = new Headers();
-                headerss.append('Authorization', `Bearer ${localStorage.getItem('tokenName')}`);
-                headerss.append('Content-Type', 'application/json');
-                fetch("https://localhost:44357/api/Products", {
-                  method: 'GET', // or 'POST', 'PUT', etc.
-                  headers: headerss,
-                }).then(res => res.json()).then(data => {
-                  console.log("----------")
-                  console.log(data)
-                  for (let i = 0; i < data.length; i++) {
-                    var html = `<option>${data[i].productName}</option>`
-                    document.getElementById('field2').insertAdjacentHTML("beforeend", html);
-                  }
-                });
+                  const headerss = new Headers();
+                  headerss.append('Authorization', `Bearer ${localStorage.getItem('tokenName')}`);
+                  headerss.append('Content-Type', 'application/json');
+                  fetch("https://localhost:44357/api/Products", {
+                    method: 'GET', // or 'POST', 'PUT', etc.
+                    headers: headerss,
+                  }).then(res => res.json()).then(data => {
+                    console.log("----------")
+                    console.log(data)
+                    for (let i = 0; i < data.length; i++) {
+                      var html = `<option>${data[i].productName}</option>`
+                      document.getElementById('field2').insertAdjacentHTML("beforeend", html);
+                    }
+                  });
                 }
                 fillSearchProduct();
 
